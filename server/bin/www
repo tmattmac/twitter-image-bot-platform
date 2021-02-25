@@ -9,6 +9,12 @@ const debug = require('debug')('server:server');
 const http = require('http');
 
 /**
+ * set environment variables from .env
+ */
+
+require('dotenv').config();
+
+/**
  * Get port from environment and store in Express.
  */
 
