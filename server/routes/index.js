@@ -1,18 +1,9 @@
-var express = require('express');
-var router = express.Router();
-const { Readable } = require('stream');
+const express = require('express');
+const router = express.Router();
+const authRouter = require('./auth');
+const imagesRouter = require('./images');
 
-const { uploadToBucket, createBucket } = require('../services/google/storage');
-
-/* GET home page. */
-router.post('/test', streamifyFiles, async function (req, res, next) {
-  try {
-    uploadToBucket('n/a', req.files.file.stream).then(() => res.send("uploaded")).catch(err => next(err));
-  } 
-  catch (err) {
-    console.log(err);
-    next(err);
-  }
-});
+router.use('/auth', authRouter);
+router.use('/images', imagesRouter);
 
 module.exports = router;

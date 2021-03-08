@@ -1,6 +1,8 @@
 const { Storage } = require('@google-cloud/storage');
 const { v4: uuid } = require('uuid');
 
+const { GCLOUD_BUCKET_NAME } = process.env;
+
 const storage = new Storage();
 
 async function createBucket(id) {
@@ -11,9 +13,9 @@ async function createBucket(id) {
 async function uploadToBucket(id, inputFileBuffer) {
 
   return new Promise((resolve, reject) => {
-    const bucket = storage.bucket("natsuki-bot.appspot.com");
+    const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
     const fileId = uuid();
-    const fileObject = bucket.file(fileId);
+    const fileObject = bucket.file(`${id}/${fileId}`);
     
     // TODO: Set caching metadata on file
     const output = fileObject.createWriteStream({
@@ -28,7 +30,13 @@ async function uploadToBucket(id, inputFileBuffer) {
   });
 }
 
+async function getFilesFromBucket(id) {
+  const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
+  return bucket.getFiles({ prefix: `${id}/` });
+}
+
 module.exports = { 
   createBucket,
-  uploadToBucket
+  uploadToBucket,
+  getFilesFromBucket
 }

@@ -24,8 +24,6 @@ async function createJob(id) {
         topicName: GCLOUD_PUBSUB_TOPIC, // TODO: Get this dynamically rather than using env
         attributes: {
           id,
-          oauthKey: "placeholder",
-          oauthSecret: "placeholder",
           repeatAllowance: 0
         }
       }

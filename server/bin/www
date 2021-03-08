@@ -1,18 +1,18 @@
 #!/usr/bin/env node
 
 /**
+ * set environment variables from .env
+ */
+
+require('dotenv').config();
+
+/**
  * Module dependencies.
  */
 
 const app = require('../app');
 const debug = require('debug')('server:server');
 const http = require('http');
-
-/**
- * set environment variables from .env
- */
-
-require('dotenv').config();
 
 /**
  * Get port from environment and store in Express.
