@@ -10,7 +10,7 @@ async function createBucket(id) {
   // TODO: Use folders instead of buckets
 }
 
-async function uploadToBucket(id, inputFileBuffer) {
+function uploadToBucket(id, inputFileBuffer) {
 
   return new Promise((resolve, reject) => {
     const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
@@ -22,7 +22,6 @@ async function uploadToBucket(id, inputFileBuffer) {
       resumable: false
     });
 
-    output.on('pipe', () => console.log('piping'));
     output.on('finish', () => resolve(fileId));
     output.on('error', (err) => reject(err));
     inputFileBuffer.pipe(output);
@@ -30,13 +29,34 @@ async function uploadToBucket(id, inputFileBuffer) {
   });
 }
 
-async function getFilesFromBucket(id) {
+function getFilesFromBucket(id) {
   const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
   return bucket.getFiles({ prefix: `${id}/` });
+}
+
+function updateFileMetadata(id, fileId, metadata) {
+  const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
+  const file = bucket.file(`${id}/${fileId}`);
+  
+  const { source } = metadata;
+  return file.setMetadata({
+    metadata: {
+      source
+    }
+  });
+}
+
+function deleteFile(id, fileId) {
+  const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
+  const file = bucket.file(`${id}/${fileId}`);
+  
+  return file.delete();
 }
 
 module.exports = { 
   createBucket,
   uploadToBucket,
-  getFilesFromBucket
+  getFilesFromBucket,
+  updateFileMetadata,
+  deleteFile
 }

@@ -20,7 +20,8 @@ passport.use(new TwitterStrategy({
   async (token, tokenSecret, profile, done) => {
     try {
       const user = await getOrCreateUser(profile.id, profile, token, tokenSecret);
-      done(null, user); // placeholder
+      console.log(user);
+      done(null, user);
     } catch (err) {
       done(err, false);
     }

@@ -5,7 +5,9 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
-const passport = require('./services/passport')
+const passport = require('passport')
+const knexSession = require('connect-session-knex')(session);
+const db = require('./services/db');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
@@ -19,8 +21,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('trust proxy', 1);
 
-app.use(session({ secret: process.env.SECRET_KEY })); // TODO: Add secure session options
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  store: new knexSession({ knex: db }),
+  resave: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000000,
+    secure: false
+  }
+})); // TODO: Add secure session options
 app.use(passport.initialize());
 app.use(passport.session());
 
