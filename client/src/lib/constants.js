@@ -1,0 +1,1 @@
+export const DEFAULT_FETCH_ERROR = 'There was an error fetching the data. Please try again.';
