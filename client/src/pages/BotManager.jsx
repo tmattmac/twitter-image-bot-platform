@@ -1,3 +1,5 @@
+import axios from 'axios';
+import { useState } from 'react';
 import useFetch from '../hooks/useFetch';
 import { getFilesFromResponse } from '../lib/transforms';
 
@@ -7,6 +9,7 @@ const BotManager = (props) => {
         'GET',
         getFilesFromResponse
     );
+    const [successMsg, setSuccessMsg] = useState('');
     
     const handleUpload = (e) => {
         const formData = new FormData();

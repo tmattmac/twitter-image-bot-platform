@@ -1,3 +1,4 @@
+import axios from "axios";
 import Navbar from "./components/Navbar";
 import useFetch from "./hooks/useFetch";
 import { getUserFromResponse } from "./lib/transforms";
@@ -5,7 +6,7 @@ import BotManager from "./pages/BotManager";
 import LandingPage from "./pages/LandingPage";
 
 function App() {
-  const [user, loading] = useFetch(
+  const [user, loading, error, _, setUser] = useFetch(
     '/auth/isAuthenticated',
     'GET',
     getUserFromResponse
