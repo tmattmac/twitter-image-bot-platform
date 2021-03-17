@@ -29,9 +29,16 @@ function uploadToBucket(id, inputFileBuffer) {
   });
 }
 
-function getFilesFromBucket(id) {
+async function getFilesFromBucket(id) {
   const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
-  return bucket.getFiles({ prefix: `${id}/` });
+  const files = await bucket.getFiles({ prefix: `${id}/` });
+  return files[0];
+}
+
+function getFileFromBucket(id, fileId) {
+  const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
+  const file = bucket.file(`${id}/${fileId}`);
+  return file.createReadStream(); // TODO: Also return content-type headers
 }
 
 function updateFileMetadata(id, fileId, metadata) {
@@ -57,6 +64,7 @@ module.exports = {
   createBucket,
   uploadToBucket,
   getFilesFromBucket,
+  getFileFromBucket,
   updateFileMetadata,
   deleteFile
 }

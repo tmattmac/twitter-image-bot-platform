@@ -8,9 +8,11 @@ const session = require('express-session');
 const passport = require('passport')
 const knexSession = require('connect-session-knex')(session);
 const db = require('./services/db');
+const { DAYS } = require('./lib/time');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+
 
 const app = express();
 
@@ -29,7 +31,7 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000000,
+    maxAge: 1 * DAYS,
     secure: false
   }
 })); // TODO: Add secure session options

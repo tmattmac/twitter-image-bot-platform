@@ -1,13 +1,15 @@
 const {
   uploadToBucket,
   getFilesFromBucket,
+  getFileFromBucket,
   updateFileMetadata,
   deleteFile
 } = require('../services/google/storage');
 
 async function uploadImage(req, res, next) {
   try {
-    uploadToBucket(req.user.id, req.files.file.stream).then(() => res.send("uploaded")).catch(err => next(err));
+    const fileId = uploadToBucket(req.user.id, req.files.file.stream);
+    res.status(201).send({ message: 'uploaded successfully', fileId });
   } 
   catch (err) {
     console.log(err);
@@ -17,13 +19,38 @@ async function uploadImage(req, res, next) {
 
 async function getImages(req, res, next) {
   try {
-    getFilesFromBucket(req.user.id).then((resp) => res.send(resp)).catch(err => next(err));
+    const files = await getFilesFromBucket(req.user.id);
+    const responseObject = files.map(file => {
+      const id = file.name.split('/')[1]; // file.name => {userId}/{fileId}
+      return {
+        id,
+        source: file.metadata.source,
+        url: `/api/images/${id}`
+      }
+    });
+
+    res.send({ files: responseObject });
   } 
   catch (err) {
     console.log(err);
     next(err);
   }
 };
+
+async function getImage(req, res, next) {
+  try {
+    const fileId = req.params.id;
+    const file = await getFileFromBucket(req.user.id, fileId);
+    res
+      .setHeader('content-type', 'image/jpeg')
+      .setHeader('Cache-Control', 'public, max-age=31536000');
+    file.pipe(res);
+  } 
+  catch (err) {
+    console.log(err);
+    next(err);
+  }
+}
 
 async function updateImageMetadata(req, res, next) {
   try {
@@ -53,6 +80,7 @@ async function deleteImage(req, res, next) {
 module.exports = {
   uploadImage,
   getImages,
+  getImage,
   updateImageMetadata,
   deleteImage
 }
