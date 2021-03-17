@@ -11,6 +11,8 @@ router.post('/', streamifyFiles, imagesController.uploadImage);
 
 router.get('/', imagesController.getImages);
 
+router.get('/:id', imagesController.getImage);
+
 router.patch('/:id', imagesController.updateImageMetadata);
 
 router.delete('/:id', imagesController.deleteImage);
