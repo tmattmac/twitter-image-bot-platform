@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import GridDisplayImageList from '../components/GridDisplayImageList';
 import useFetch from '../hooks/useFetch';
 import { getFilesFromResponse } from '../lib/transforms';
 
@@ -9,26 +9,48 @@ const BotManager = (props) => {
         'GET',
         getFilesFromResponse
     );
-    const [successMsg, setSuccessMsg] = useState('');
     
     const handleUpload = (e) => {
-        const formData = new FormData();
+        const newImages = [...e.target.files].map(file => {
+          const formData = new FormData();
+          formData.append('file', file);
 
-        formData.append('file', e.target.files[0]);
-        axios.post('/api/images', formData).then(() => setSuccessMsg('file uploaded'));
+          const tempFileId = String(Math.random()); // TODO: Replace with client-side UUID
+
+          axios.post('/api/images', formData)
+            .then(response => {
+              const { id } = response.data;
+              // update image in state once uploaded, may figure out how to batch these updates
+              setImages(images => {
+                return images.map(image => {
+                  if (image.clientId !== tempFileId) return image;
+                  return {
+                    ...image,
+                    id,
+                    isUploading: false,
+                  }
+                });
+              });
+            });
+
+          return {
+            clientId: tempFileId, 
+            url: URL.createObjectURL(file),
+            source: '',
+            isUploading: true
+          }
+        });
+      
+      setImages(oldImages => [...newImages, ...oldImages]);
     }
 
     return (
         <>
             <form>
-                <input type="file" onChange={handleUpload} value={null} />
+                <input type="file" onChange={handleUpload} value={undefined} multiple />
             </form>
-            {images && (
-                images.map(image => {
-                    return <img src={image.url} alt={image.id} key={image.id} />;
-                })
-            )}
-            <p>{successMsg}</p>
+            <GridDisplayImageList images={images || []} />
+
         </>
     )
 }

@@ -1,3 +1,4 @@
+import { Container } from "@material-ui/core";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import useFetch from "./hooks/useFetch";
@@ -30,7 +31,9 @@ function App() {
   return (
     <div>
       <Navbar user={user} handleLogout={handleLogout} />
-      {display}
+      <Container maxWidth="lg">
+        {display}
+      </Container>
     </div>
   )
 }

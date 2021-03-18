@@ -1,15 +1,15 @@
-
+import { AppBar, Button } from '@material-ui/core';
 
 const Navbar = ({ user, handleLogout }) => {
+
     return (
-        <div>
-        <p>{user?.id || 'No one logged in'}</p>
+        <AppBar position="static">
         {user ?
-            <a href="#" onClick={handleLogout}>Log out</a>
+            <Button onClick={handleLogout} color="inherit">{user.display_name} (Log out)</Button>
             :
-            <a href="/auth">Log in</a>
+            <Button href="/auth" color="inherit">Log in</Button>
         }
-        </div>
+        </AppBar>
     )
 }
 
