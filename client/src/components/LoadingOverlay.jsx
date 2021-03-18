@@ -19,26 +19,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// note, using this with absolutely positioned elements will break
-const LoadingOverlay = ({ children, isLoading }) => {
+// note, only use in positioned elements
+const LoadingOverlay = ({ isLoading }) => {
   const classes = useStyles();
-  const overlay = (
-    <Fade in={isLoading} key="thanks React">
+  return (
+    <Fade in={isLoading}>
       <div className={classes.root}>
         <CircularProgress className={classes.progress} />
       </div>
     </Fade>
   );
-
-  return React.Children.only(children) &&
-    React.Children.map(children, child => {
-      return React.cloneElement(child, {
-        style: {
-          width: 'relative',
-          ...child.props.style
-        }
-      }, [child.props.children, overlay])
-    });
 }
 
 export default LoadingOverlay;

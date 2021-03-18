@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { useState } from 'react';
 import GridDisplayImageList from '../components/GridDisplayImageList';
+import ImageEditDialog from '../components/ImageEditDialog';
 import useFetch from '../hooks/useFetch';
 import { getFilesFromResponse } from '../lib/transforms';
 
@@ -9,6 +11,8 @@ const BotManager = (props) => {
         'GET',
         getFilesFromResponse
     );
+    
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     
     const handleUpload = (e) => {
         const newImages = [...e.target.files].map(file => {
@@ -43,14 +47,22 @@ const BotManager = (props) => {
       
       setImages(oldImages => [...newImages, ...oldImages]);
     }
+  
+  const handleClickImage = (idx) => {
+    setSelectedImageIndex(idx);
+  }
+
+  const handleCloseDialog = () => setSelectedImageIndex(null);
+
+  const selectedImage = selectedImageIndex === null ? null : images[selectedImageIndex];
 
     return (
         <>
             <form>
                 <input type="file" onChange={handleUpload} value={undefined} multiple />
             </form>
-            <GridDisplayImageList images={images || []} />
-
+            <GridDisplayImageList images={images || []} handleClickImage={handleClickImage} />
+            <ImageEditDialog open={!!selectedImage} handleClose={handleCloseDialog} image={selectedImage} />
         </>
     )
 }

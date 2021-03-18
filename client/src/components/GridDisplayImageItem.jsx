@@ -18,29 +18,31 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const GridDisplayImageItem = ({ image, ...props }) => {
+const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
 
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
 
   return (
     <Grid item xs={12} sm={6} md={3}>
-      <LazyLoad height={200} once>
-        <LoadingOverlay isLoading={image.isUploading}>
-          <Card className={classes.card} elevation={isLoading ? 0 : 1}>
+      <LazyLoad height={200} offset={100} once>
+      <Fade in={!isLoading}>
+        <Card className={classes.card}>
+          <LoadingOverlay isLoading={image.isUploading} />
+          
             <CardActionArea>
-              <Fade in={!isLoading}>
                 <CardMedia
                   image={image.url}
                   title={image.id}
                   className={classes.image}
                   component="img"
                   onLoad={() => setIsLoading(false)}
+                  onClick={() => handleClick()}
                 />
-              </Fade>
             </CardActionArea>
+            
           </Card>
-        </LoadingOverlay>
+          </Fade>
       </LazyLoad>
     </Grid>
   )
