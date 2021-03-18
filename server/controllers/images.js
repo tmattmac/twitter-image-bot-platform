@@ -9,7 +9,11 @@ const {
 async function uploadImage(req, res, next) {
   try {
     const fileId = uploadToBucket(req.user.id, req.files.file.stream);
-    res.status(201).send({ message: 'uploaded successfully', fileId });
+    res.status(201).send({
+      message: 'uploaded successfully',
+      id: fileId,
+      url: `/api/images/${fileId}`
+    });
   } 
   catch (err) {
     console.log(err);
