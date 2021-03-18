@@ -28,7 +28,7 @@ async function getImages(req, res, next) {
       const id = file.name.split('/')[1]; // file.name => {userId}/{fileId}
       return {
         id,
-        source: file.metadata.source,
+        source: file.metadata.source || '',
         url: `/api/images/${id}`
       }
     });
