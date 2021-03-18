@@ -8,7 +8,7 @@ const {
 
 async function uploadImage(req, res, next) {
   try {
-    const fileId = uploadToBucket(req.user.id, req.files.file.stream);
+    const fileId = await uploadToBucket(req.user.id, req.files.file.stream);
     res.status(201).send({
       message: 'uploaded successfully',
       id: fileId,
