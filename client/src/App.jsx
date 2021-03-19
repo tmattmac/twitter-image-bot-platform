@@ -16,10 +16,10 @@ function App() {
   const handleLogout = (e) => {
     e.preventDefault();
     axios.post('/auth/logout')
-        .then(response => {
-            setUser(null);
-        })
-        .catch(console.error); // TODO: Handle error properly
+      .then(response => {
+        setUser(null);
+      })
+      .catch(console.error); // TODO: Handle error properly
   }
 
   let display;
