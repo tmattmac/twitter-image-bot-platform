@@ -28,7 +28,7 @@ const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
       <LazyLoad height={200} offset={100} once>
         <Fade in={!isLoading}>
           <Card className={classes.card}>
-            <LoadingOverlay isLoading={image.isUploading} />
+            <LoadingOverlay isLoading={image.status.upload.pending} />
             <CardActionArea>
               <CardMedia
                 image={image.url}

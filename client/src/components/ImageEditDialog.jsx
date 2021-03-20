@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
   const [displayImage, setDisplayImage] = useState(image);
-  const [caption, setCaption] = useState(image?.source || '');
+  const [caption, setCaption] = useState('');
   const [isSaved, setIsSaved] = useState(true);
   const classes = useStyles();
 
@@ -45,7 +45,7 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
   useEffect(() => {
     if (image) {
       setDisplayImage(image);
-      setCaption(image?.source || '');
+      setCaption(image.source);
       setIsSaved(true);
     }
   }, [image]);
