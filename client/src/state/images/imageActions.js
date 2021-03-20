@@ -24,30 +24,9 @@ export function fetchData() {
   return (dispatch) => {
     api.getAll()
       .then(data => {
-        const transformedData = data.map(image => {
-          return Object.assign(image, {
-            clientId: null,
-            status: {
-              upload: {
-                pending: false,
-                error: null,
-                file: null
-              },
-              edit: {
-                pending: false,
-                error: null
-              },
-              delete: {
-                pending: false,
-                error: null
-              }
-            }
-          });
-        });
-    
         dispatch({
           type: actions.FETCH_DATA,
-          payload: transformedData
+          payload: data
         });
       })
       .catch(err => {
@@ -70,7 +49,7 @@ export function uploadFiles(files) {
         url: URL.createObjectURL(upload.file)
       }))
     });
-
+    
     uploads.forEach(upload => {
       upload.request
         .then(data => {

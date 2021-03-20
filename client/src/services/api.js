@@ -10,6 +10,7 @@ export default class APIClient {
       baseURL: '/api/images'
     });
     this._uploadQueue = []; // TODO: Use an actual queue implementation
+    this.uploadFile = this.uploadFile.bind(this);
   }
 
   getAll() {
@@ -22,7 +23,7 @@ export default class APIClient {
 
     const uploads = [];
 
-    fileList.forEach(file => {
+    [...fileList].forEach(file => {
       if (!isImage(file)) return; // consider showing an error instead
       const clientId = uuid();
       
@@ -41,15 +42,15 @@ export default class APIClient {
         queue.push(upload);
       });
 
-      // immediately dequeue first set of uploads
-      queue.splice(0, 5).forEach(upload => upload());
-
       uploads.push({
         clientId,
         request,
         file
       });
     });
+
+    // immediately dequeue first set of uploads
+    queue.splice(0, 5).forEach(upload => upload());
 
     return uploads;
   }
@@ -58,8 +59,10 @@ export default class APIClient {
     const formData = new FormData();
     formData.append('file', file);
 
+    const _axios = this._axios;
+
     return new Promise((resolve, reject) => {
-      this._axios.post('/', formData)
+      _axios.post('/', formData)
         .then((response) => resolve(response.data))
         .catch(reject);
     });

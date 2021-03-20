@@ -1,4 +1,4 @@
-import { defaults, pick } from 'lodash';
+import { defaultsDeep, pick } from 'lodash';
 import { actions } from './imageActions';
 
 const defaultImageState = {
@@ -37,7 +37,7 @@ export default (state, action) => {
         loaded: true,
         error: null,
         images: action.payload.map(image => {
-          return defaults(
+          return defaultsDeep(
             pick(image, ['id', 'url', 'source']),
             defaultImageState
           )
@@ -53,7 +53,7 @@ export default (state, action) => {
     
     case actions.IMAGE_UPLOAD:
       const newImages = action.payload.map(image => {
-        const newImage = defaults(
+        const newImage = defaultsDeep(
           pick(image, ['clientId', 'url']),
           defaultImageState
         );
@@ -126,6 +126,7 @@ export default (state, action) => {
               }
             }
           }
+          return image;
         })
       }
   }

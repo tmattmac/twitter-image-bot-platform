@@ -12,7 +12,7 @@ const BotManager = (props) => {
 
   useEffect(() => {
     dispatch(fetchData());
-  }, []);
+  }, [dispatch]);
 
   const handleUpload = (e) => {
     dispatch(uploadFiles(e.target.files));
