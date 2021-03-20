@@ -3,14 +3,18 @@ import { v4 as uuid } from 'uuid';
 
 const isImage = (file) => file.type.startsWith('image');
 
-export default {
-  _axios: axios.create(),
+export default class APIClient {
 
-  _uploadQueue: [], // TODO: Use an actual queue implementation
+  constructor() {
+    this._axios = axios.create({
+      baseURL: '/api/images'
+    });
+    this._uploadQueue = []; // TODO: Use an actual queue implementation
+  }
 
   getAll() {
-    this._axios.get('/api/images').then(response => response.data.files);
-  },
+    return this._axios.get().then(response => response.data.files);
+  }
 
   queueFileUploads(fileList) {
     const uploadFile = this.uploadFile;
@@ -48,17 +52,16 @@ export default {
     });
 
     return uploads;
-  },
+  }
 
   uploadFile(file) {
     const formData = new FormData();
     formData.append('file', file);
 
     return new Promise((resolve, reject) => {
-      this._axios.post('/api/images', formData)
+      this._axios.post('/', formData)
         .then((response) => resolve(response.data))
         .catch(reject);
     });
-    
   }
 }

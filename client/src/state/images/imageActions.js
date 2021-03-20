@@ -1,7 +1,9 @@
 import { DEFAULT_FETCH_ERROR } from '../../lib/constants';
-import api from '../../services/api';
+import APIClient from '../../services/api';
 
-export default actions = {
+const api = new APIClient();
+
+export const actions = {
   FETCH_DATA: 'FETCH_DATA',
   FETCH_DATA_FAILURE: 'FETCH_DATA_FAILURE',
   IMAGE_UPLOAD: 'IMAGE_UPLOAD',
@@ -65,7 +67,7 @@ export function uploadFiles(files) {
       type: actions.IMAGE_UPLOAD,
       payload: uploads.map(upload => ({
         ...upload,
-        url: URL.createObjectURL(file)
+        url: URL.createObjectURL(upload.file)
       }))
     });
 
@@ -86,7 +88,7 @@ export function uploadFiles(files) {
             payload: {
               clientId: upload.clientId
             },
-            error: err.response?.data?.message || DEFAULT_FETCH_ERROR
+            error: error.response?.data?.message || DEFAULT_FETCH_ERROR
           })
         })
     });

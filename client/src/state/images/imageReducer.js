@@ -1,5 +1,5 @@
 import { defaults, pick } from 'lodash';
-import actions from './imageActions';
+import { actions } from './imageActions';
 
 const defaultImageState = {
   id: null,
@@ -29,7 +29,7 @@ export const initialState = {
   error: null,
 }
 
-export default reducer = (state, action) => {
+export default (state, action) => {
   switch (action.type) {
     case actions.FETCH_DATA:
       return {
