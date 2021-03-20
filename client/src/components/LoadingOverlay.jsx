@@ -11,7 +11,8 @@ const useStyles = makeStyles(theme => ({
     background: 'rgba(0,0,0,0.7)',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    zIndex: 2
   },
   progress: {
     position: 'relative',
