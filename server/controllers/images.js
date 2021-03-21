@@ -1,3 +1,4 @@
+const sortFilesByDate = require('../helpers/sortFilesByDate');
 const {
   uploadToBucket,
   getFilesFromBucket,
@@ -25,6 +26,7 @@ async function uploadImage(req, res, next) {
 async function getImages(req, res, next) {
   try {
     const files = await getFilesFromBucket(req.user.id);
+    sortFilesByDate(files);
     const responseObject = files.map(file => {
       const id = file.name.split('/')[1]; // file.name => {userId}/{fileId}
       return {
