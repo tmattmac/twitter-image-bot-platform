@@ -45,7 +45,7 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
   useEffect(() => {
     if (image) {
       setDisplayImage(image);
-      setCaption(image.source);
+      setCaption(image.caption);
       setIsSaved(true);
     }
   }, [image]);

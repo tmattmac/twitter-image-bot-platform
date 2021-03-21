@@ -3,7 +3,7 @@ import { actions } from './imageActions';
 
 const defaultImageState = {
   id: null,
-  source: '',
+  caption: '',
   url: '',
   clientId: null,
   status: {
@@ -38,7 +38,7 @@ export default (state, action) => {
         error: null,
         images: action.payload.map(image => {
           return defaultsDeep(
-            pick(image, ['id', 'url', 'source']),
+            pick(image, ['id', 'url', 'caption']),
             defaultImageState
           )
         })

@@ -50,10 +50,10 @@ function updateFileMetadata(id, fileId, metadata) {
   const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
   const file = bucket.file(`${id}/${fileId}`);
   
-  const { source } = metadata;
+  const { caption } = metadata;
   return file.setMetadata({
     metadata: {
-      source
+      caption
     }
   });
 }
