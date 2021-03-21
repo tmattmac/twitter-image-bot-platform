@@ -31,7 +31,7 @@ async function getImages(req, res, next) {
       const id = file.name.split('/')[1]; // file.name => {userId}/{fileId}
       return {
         id,
-        caption: file.metadata.caption || '',
+        caption: file.metadata.metadata?.caption || '',
         url: `/api/images/${id}`
       }
     });
@@ -62,7 +62,13 @@ async function getImage(req, res, next) {
 async function updateImageMetadata(req, res, next) {
   try {
     const metadata = req.body.metadata;
-    updateFileMetadata(req.user.id, metadata).then((resp) => res.send(resp)).catch(err => next(err));
+    const fileId = req.params.id;
+    const response = await updateFileMetadata(req.user.id, fileId, metadata);
+    res.send({
+      message: 'successfully updated metadata',
+      id: fileId,
+      metadata
+    })
   } 
   catch (err) {
     console.log(err);
