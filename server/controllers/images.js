@@ -8,7 +8,8 @@ const {
 
 async function uploadImage(req, res, next) {
   try {
-    const fileId = await uploadToBucket(req.user.id, req.files.file.stream);
+    const { file } = req.files;
+    const fileId = await uploadToBucket(req.user.id, file.stream, file.mimetype);
     res.status(201).send({
       message: 'uploaded successfully',
       id: fileId,
@@ -44,9 +45,9 @@ async function getImages(req, res, next) {
 async function getImage(req, res, next) {
   try {
     const fileId = req.params.id;
-    const file = await getFileFromBucket(req.user.id, fileId);
+    const [file, contentType] = await getFileFromBucket(req.user.id, fileId);
     res
-      .setHeader('content-type', 'image/jpeg')
+      .setHeader('content-type', contentType)
       .setHeader('Cache-Control', 'public, max-age=31536000');
     file.pipe(res);
   } 
