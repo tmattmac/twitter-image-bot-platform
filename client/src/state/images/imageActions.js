@@ -13,6 +13,7 @@ export const actions = {
   IMAGE_CAPTION_UPDATE: 'IMAGE_CAPTION_UPDATE',
   IMAGE_CAPTION_UPDATE_SUCCESS: 'IMAGE_CAPTION_UPDATE_SUCCESS',
   IMAGE_CAPTION_UPDATE_FAILURE: 'IMAGE_CAPTION_UPDATE_FAILURE',
+  IMAGE_CAPTION_CLEAR_ERROR: 'IMAGE_CAPTION_CLEAR_ERROR',
   IMAGE_SELECTED: 'IMAGE_SELECTED',
   IMAGE_UNSELECTED: 'IMAGE_UNSELECTED',
   IMAGE_DELETE: 'IMAGE_DELETE',
@@ -71,5 +72,37 @@ export function uploadFiles(files) {
           })
         })
     });
+  }
+}
+
+export function updateImageCaption(id, caption) {
+  return (dispatch) => {
+    dispatch({
+      type: actions.IMAGE_CAPTION_UPDATE,
+      payload: { id }
+    });
+
+    api.update(id, { caption })
+      .then(() => {
+        dispatch({
+          type: actions.IMAGE_CAPTION_UPDATE_SUCCESS,
+          payload: { id, caption }
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({
+          type: actions.IMAGE_CAPTION_UPDATE_FAILURE,
+          payload: { id },
+          error: error.response?.data?.message || DEFAULT_FETCH_ERROR
+        })
+      })
+  }
+}
+
+export function clearEditError(id) {
+  return {
+    type: actions.IMAGE_CAPTION_CLEAR_ERROR,
+    payload: { id }
   }
 }

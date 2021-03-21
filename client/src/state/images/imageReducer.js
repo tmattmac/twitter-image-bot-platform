@@ -129,5 +129,87 @@ export default (state, action) => {
           return image;
         })
       }
+    
+    case actions.IMAGE_CAPTION_UPDATE:
+      return {
+        ...state,
+        images: state.images.map(image => {
+          if (image.id === action.payload.id) {
+            return {
+              ...image,
+              status: {
+                ...image.status,
+                edit: {
+                  pending: true,
+                  error: null
+                }
+              }
+            }
+          }
+          return image;
+        })
+      }
+    
+    case actions.IMAGE_CAPTION_UPDATE_SUCCESS:
+      return {
+        ...state,
+        images: state.images.map(image => {
+          if (image.id === action.payload.id) {
+            return {
+              ...image,
+              caption: action.payload.caption,
+              status: {
+                ...image.status,
+                edit: {
+                  pending: false,
+                  error: null
+                }
+              }
+            }
+          }
+          return image;
+        })
+      }
+    
+    case actions.IMAGE_CAPTION_UPDATE_FAILURE:
+      return {
+        ...state,
+        images: state.images.map(image => {
+          if (image.id === action.payload.id) {
+            return {
+              ...image,
+              status: {
+                ...image.status,
+                edit: {
+                  pending: false,
+                  error: action.error
+                }
+              }
+            }
+          }
+          return image;
+        })
+      }
+    
+    case actions.IMAGE_CAPTION_CLEAR_ERROR:
+      console.log(action.payload.id)
+      return {
+        ...state,
+        images: state.images.map(image => {
+          if (image.id === action.payload.id) {
+            return {
+              ...image,
+              status: {
+                ...image.status,
+                edit: {
+                  ...image.status.edit,
+                  error: null
+                }
+              }
+            }
+          }
+          return image;
+        })
+      }
   }
 }

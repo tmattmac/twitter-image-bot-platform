@@ -1,6 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, TextField, useMediaQuery, useTheme } from "@material-ui/core";
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from "react";
+import { clearEditError, updateImageCaption } from "../state/images/imageActions";
 
 const useStyles = makeStyles(theme => ({
   dialogWrapper: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
+const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch }) => {
   const [displayImage, setDisplayImage] = useState(image);
   const [caption, setCaption] = useState('');
   const [isSaved, setIsSaved] = useState(true);
@@ -44,10 +45,16 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
 
   useEffect(() => {
     if (image) {
+      const { pending, error } = image.status.edit;
+      const shouldSetCaption = !pending && !error;
       setDisplayImage(image);
-      setCaption(image.caption);
-      setIsSaved(true);
+      if (shouldSetCaption) setCaption(image.caption);
+      setIsSaved(!image.status.edit.error);
+      return () => {
+        if (error) dispatch(clearEditError(image.id));
+      }
     }
+
   }, [image]);
 
   const handleFormChange = (event) => {
@@ -58,6 +65,7 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsSaved(true);
+    dispatch(updateImageCaption(image.id, caption));
   }
 
   return (
@@ -85,6 +93,8 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog }) => {
             onChange={handleFormChange}
             className={classes.formInput}
             variant="outlined"
+            disabled={image?.status.edit.pending}
+            multiline
           />
           <Button disabled={isSaved} type="submit" color="primary">
             Save

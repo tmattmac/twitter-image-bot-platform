@@ -32,7 +32,7 @@ const BotManager = (props) => {
         <input type="file" onChange={handleUpload} value="" multiple />
       </form>
       <GridDisplayImageList images={state.images} handleClickImage={handleClickImage} />
-      <ImageEditDialog open={!!selectedImage} handleClose={handleCloseDialog} image={selectedImage} />
+      <ImageEditDialog open={!!selectedImage} handleClose={handleCloseDialog} image={selectedImage} dispatch={dispatch} />
     </>
   )
 }

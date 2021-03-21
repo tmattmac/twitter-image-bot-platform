@@ -17,6 +17,10 @@ export default class APIClient {
     return this._axios.get().then(response => response.data.files);
   }
 
+  update(id, metadata) {
+    return this._axios.patch(`/${id}`, { metadata }).then(response => response.data);
+  }
+
   queueFileUploads(fileList) {
     const uploadFile = this.uploadFile;
     const queue = this._uploadQueue;
