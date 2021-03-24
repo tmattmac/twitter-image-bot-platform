@@ -20,7 +20,6 @@ passport.use(new TwitterStrategy({
   async (token, tokenSecret, profile, done) => {
     try {
       const user = await getOrCreateUser(profile.id, profile, token, tokenSecret);
-      console.log(user);
       done(null, user);
     } catch (err) {
       done(err, false);
@@ -29,16 +28,19 @@ passport.use(new TwitterStrategy({
 ));
 
 passport.serializeUser(function (user, done) {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async function (id, done) {
+passport.deserializeUser(async function (user, done) {
   try {
+    return done(null, user);
+    /*
     const user = await getUser(id);
     if (user) {
       return done(null, user);
     }
-    return done(createHttpError(403, "Unauthorized"))
+    return done(createHttpError(403, "Unauthorized"));
+    */
   } catch (err) {
     done(err);
   }
