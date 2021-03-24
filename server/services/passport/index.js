@@ -34,13 +34,6 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(async function (user, done) {
   try {
     return done(null, user);
-    /*
-    const user = await getUser(id);
-    if (user) {
-      return done(null, user);
-    }
-    return done(createHttpError(403, "Unauthorized"));
-    */
   } catch (err) {
     done(err);
   }
