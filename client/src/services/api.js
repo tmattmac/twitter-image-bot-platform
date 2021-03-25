@@ -3,22 +3,22 @@ import { v4 as uuid } from 'uuid';
 
 const isImage = (file) => file.type.startsWith('image');
 
-export default class APIClient {
+class APIClient {
 
   constructor() {
     this._axios = axios.create({
-      baseURL: '/api/images'
+      baseURL: '/api'
     });
     this._uploadQueue = []; // TODO: Use an actual queue implementation
     this.uploadFile = this.uploadFile.bind(this);
   }
 
   getAll() {
-    return this._axios.get().then(response => response.data.files);
+    return this._axios.get('/images').then(response => response.data.files);
   }
 
   update(id, metadata) {
-    return this._axios.patch(`/${id}`, { metadata }).then(response => response.data);
+    return this._axios.patch(`/images/${id}`, { metadata }).then(response => response.data);
   }
 
   queueFileUploads(fileList) {
@@ -66,9 +66,27 @@ export default class APIClient {
     const _axios = this._axios;
 
     return new Promise((resolve, reject) => {
-      _axios.post('/', formData)
+      _axios.post('/images', formData)
         .then((response) => resolve(response.data))
         .catch(reject);
     });
   }
+
+  getSchedule() {
+    return this._axios.get('/schedule').then(response => response.data.options)
+  }
+
+  updateSchedule(options) {
+    const timeZone = new Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+    return this._axios.patch('/schedule', {
+      options: {
+        ...options,
+        timeZone
+      }
+    });
+  }
 }
+
+const instance = new APIClient();
+export default instance;

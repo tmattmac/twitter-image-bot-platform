@@ -1,7 +1,5 @@
 import { DEFAULT_FETCH_ERROR } from '../../lib/constants';
-import APIClient from '../../services/api';
-
-const api = new APIClient();
+import api from '../../services/api';
 
 export const actions = {
   FETCH_DATA: 'FETCH_DATA',
