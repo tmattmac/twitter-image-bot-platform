@@ -24,7 +24,7 @@ passport.use(new TwitterStrategy({
       try {
         await createJob(profile.id);
       } catch (err) {
-        if (error.code !== 6) { // ignore error if ALREADY_EXISTS error code from Google API
+        if (err.code !== 6) { // ignore error if ALREADY_EXISTS error code from Google API
           throw createHttpError(502, 'Error creating schedule. Please try again later.');
         }
       }
