@@ -31,9 +31,9 @@ const useFetch = (url, method = 'GET', dataTransform) => {
     setLoading(false);
   }, [url, method, dataTransform]);
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   return [data, loading, error, fetchData, setData]; // fetchData => retry request
 }
