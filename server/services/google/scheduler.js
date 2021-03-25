@@ -7,66 +7,83 @@ const {
   GCLOUD_PUBSUB_TOPIC
 } = process.env;
 
-const DEFAULT_TIMER = "0 * * * *";
+const DEFAULT_TIMER = "every 1 hours from 00:00 to 23:59";
 
 const client = new scheduler.CloudSchedulerClient();
 
 async function createJob(id) {
   const parent = client.locationPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION);
+  const name = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
 
   await client.createJob({
     parent,
     job: {
-      name: id,
+      name,
+      description: "Periodic image posting task",
       schedule: DEFAULT_TIMER,
-      state: "DISABLED",
       pubsubTarget: {
         topicName: GCLOUD_PUBSUB_TOPIC, // TODO: Get this dynamically rather than using env
         attributes: {
+          enabled: false,
           id,
           repeatAllowance: 0
         }
       }
     }
   });
+
+  return job[0];
 }
 
 async function updateJob(id, options) {
-  const job = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
+  const name = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
 
-  const { schedule, enabled, repeatAllowance } = options;
+  const { schedule, enabled, timeZone } = options;
   const updateMask = generateUpdateMask(options);
 
-  const state = enabled ? "ENABLED" : "DISABLED";
-
-  await client.updateJob({
+  let job = await client.updateJob({
     job: {
-      name: job,
+      name,
       schedule,
-      state,
+      timeZone,
       pubsubTarget: {
         attributes: {
-          repeatAllowance
+          enabled,
+          id
         }
       }
     },
-    updateMask
+    updateMask: {
+      paths: ['schedule', 'pubsub_target.attributes', 'time_zone']
+    }
   });
+  
+  return job[0];
+}
+
+async function getJob(id) {
+  const name = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
+  const job = await client.getJob({ name });
+  return job[0];
 }
 
 function generateUpdateMask(options) {
   const mask = [];
 
+  if (options.enabled) {
+    mask.push('pubsubTarget.attributes.enabled');
+  }
+
   if (options.schedule) {
     mask.push('schedule');
   }
 
-  if (options.enabled) {
-    mask.push('state');
-  }
-
   if (options.repeatAllowance) {
     mask.push('pubsubTarget.attributes.repeatAllowance');
+  }
+
+  if (options.timeZone) {
+    mask.push('timeZone');
   }
 
   return mask;
@@ -74,5 +91,6 @@ function generateUpdateMask(options) {
 
 module.exports = {
   createJob,
-  updateJob
+  updateJob,
+  getJob
 }
