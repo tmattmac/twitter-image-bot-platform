@@ -1,9 +1,10 @@
 const passport = require('passport');
 const TwitterStrategy = require('passport-twitter').Strategy;
 const createHttpError = require('http-errors');
+const { createJob } = require('../google/scheduler');
 
 // import db stuff
-const { getUser, getOrCreateUser } = require('../db/user');
+const { getOrCreateUser } = require('../db/user');
 
 const {
   TWITTER_CONSUMER_KEY,
@@ -20,6 +21,13 @@ passport.use(new TwitterStrategy({
   async (token, tokenSecret, profile, done) => {
     try {
       const user = await getOrCreateUser(profile.id, profile, token, tokenSecret);
+      try {
+        await createJob(profile.id);
+      } catch (err) {
+        if (error.code !== 6) { // ignore error if ALREADY_EXISTS error code from Google API
+          throw createHttpError(502, 'Error creating schedule. Please try again later.');
+        }
+      }
       done(null, user);
     } catch (err) {
       done(err, false);
