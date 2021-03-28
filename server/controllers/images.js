@@ -79,7 +79,11 @@ async function updateImageMetadata(req, res, next) {
 async function deleteImage(req, res, next) {
   try {
     const fileId = req.params.id;
-    deleteFile(req.user.id, fileId).then((resp) => res.send(resp)).catch(err => next(err));
+    const response = await deleteFile(req.user.id, fileId);
+    res.send({
+      message: 'successfully deleted file',
+      id: fileId
+    })
   } 
   catch (err) {
     console.log(err);

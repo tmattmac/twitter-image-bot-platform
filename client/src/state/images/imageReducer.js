@@ -211,5 +211,56 @@ export default (state, action) => {
           return image;
         })
       }
+    
+      case actions.IMAGE_DELETE:
+        return {
+          ...state,
+          images: state.images.map(image => {
+            if (image.id === action.payload.id) {
+              return {
+                ...image,
+                status: {
+                  ...image.status,
+                  delete: {
+                    pending: true,
+                    error: null
+                  }
+                }
+              }
+            }
+            return image;
+          })
+        }
+      
+      case actions.IMAGE_DELETE_SUCCESS:
+        return {
+          ...state,
+          images: state.images.filter(image => {
+            if (image.id === action.payload.id) {
+              return false;
+            }
+            return image;
+          })
+        }
+      
+      case actions.IMAGE_DELETE_FAILURE:
+        return {
+          ...state,
+          images: state.images.map(image => {
+            if (image.id === action.payload.id) {
+              return {
+                ...image,
+                status: {
+                  ...image.status,
+                  delete: {
+                    pending: false,
+                    error: action.error
+                  }
+                }
+              }
+            }
+            return image;
+          })
+        }
   }
 }

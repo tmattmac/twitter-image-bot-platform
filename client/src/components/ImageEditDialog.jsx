@@ -1,7 +1,9 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, TextField, useMediaQuery, useTheme } from "@material-ui/core";
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from "react";
-import { clearEditError, updateImageCaption } from "../state/images/imageActions";
+import useConfirmationDialog from "../hooks/useConfirmationDialog";
+import { clearEditError, deleteImage, updateImageCaption } from "../state/images/imageActions";
+import ConfirmationDialog from './ConfirmationDialog';
 
 const useStyles = makeStyles(theme => ({
   dialogWrapper: {
@@ -36,6 +38,8 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch
   const [isSaved, setIsSaved] = useState(true);
   const classes = useStyles();
 
+  const { openDialog, getDialogProps } = useConfirmationDialog();
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -66,6 +70,15 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch
     event.preventDefault();
     setIsSaved(true);
     dispatch(updateImageCaption(image.id, caption));
+  }
+
+  const handleDelete = () => {
+    openDialog({
+      handleConfirm: () => {
+        dispatch(deleteImage(image.id));
+        handleCloseDialog();
+      }
+    })
   }
 
   return (
@@ -99,11 +112,15 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch
           <Button disabled={isSaved} type="submit" color="primary">
             Save
           </Button>
-          <Button color="secondary" onClick={handleCloseDialog}>
+          <Button color="secondary" onClick={handleDelete}>
+            Delete
+          </Button>
+          <Button color="default" onClick={handleCloseDialog}>
             Cancel
           </Button>
         </form>
       </DialogActions>
+      <ConfirmationDialog {...getDialogProps()} />
     </Dialog>
   )
 }

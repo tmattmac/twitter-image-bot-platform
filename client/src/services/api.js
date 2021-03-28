@@ -72,6 +72,10 @@ class APIClient {
     });
   }
 
+  delete(id) {
+    return this._axios.delete(`/images/${id}`);
+  }
+
   getSchedule() {
     return this._axios.get('/schedule').then(response => response.data.options)
   }

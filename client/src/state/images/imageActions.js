@@ -1,4 +1,4 @@
-import { DEFAULT_FETCH_ERROR, DEFAULT_UPLOAD_ERROR } from '../../lib/constants';
+import { DEFAULT_DELETE_ERROR, DEFAULT_FETCH_ERROR, DEFAULT_UPLOAD_ERROR } from '../../lib/constants';
 import api from '../../services/api';
 
 export const actions = {
@@ -93,6 +93,31 @@ export function updateImageCaption(id, caption) {
           type: actions.IMAGE_CAPTION_UPDATE_FAILURE,
           payload: { id },
           error: error.response?.data?.message || DEFAULT_FETCH_ERROR
+        })
+      })
+  }
+}
+
+export function deleteImage(id) {
+  return (dispatch) => {
+    dispatch({
+      type: actions.IMAGE_DELETE,
+      payload: { id }
+    });
+
+    api.delete(id)
+      .then(() => {
+        dispatch({
+          type: actions.IMAGE_DELETE_SUCCESS,
+          payload: { id },
+          success: 'Image deleted successfully'
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: actions.IMAGE_DELETE_FAILURE,
+          payload: { id },
+          error: error.response?.data?.message || DEFAULT_DELETE_ERROR
         })
       })
   }
