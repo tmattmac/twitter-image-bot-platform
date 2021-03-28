@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControlLabel, makeStyles, MenuItem, Select, TextField, Typography } from '@material-ui/core';
+import { Button, Checkbox, FormControl, FormControlLabel, makeStyles, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import useAsyncService from '../hooks/useAsyncService';
 import api from '../services/api';
@@ -14,9 +14,6 @@ const useStyles = makeStyles(theme => ({
   inlineInputGroup: {
     display: "flex",
     alignItems: "baseline"
-  },
-  selectDisplay: {
-    // padding: theme.spacing(0, 1)
   }
 }));
 
@@ -60,19 +57,21 @@ const EditScheduleForm = () => {
       <form onSubmit={handleSubmit}>
         <div className={classes.inlineInputGroup}>
         <Typography variant="body1">
-          Post every
+            Post every
         </Typography>
-          <Select
-            name="frequency"
-            aria-label="Frequency"
-            value={formData.frequency}
-            disabled={loading}
-            onChange={handleChange}
-            className={classes.inlineInput}
-            
-          >
-            {FREQUENCY_OPTIONS.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
-          </Select>
+          <FormControl variant="outlined" size="small">
+            <Select
+              name="frequency"
+              aria-label="Frequency"
+              value={formData.frequency}
+              disabled={loading}
+              onChange={handleChange}
+              className={classes.inlineInput}
+              
+            >
+              {FREQUENCY_OPTIONS.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
+            </Select>
+          </FormControl>
           <Typography variant="body1">
           hours starting at
         </Typography>
