@@ -1,9 +1,10 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import { useEffect, useState } from 'react';
 import EditScheduleForm from '../components/EditScheduleForm';
+import FileUpload from '../components/FileUpload';
 import GridDisplayImageList from '../components/GridDisplayImageList';
 import ImageEditDialog from '../components/ImageEditDialog';
-import useAsyncReducer from '../hooks/useAsyncReducer';
+import useAsyncReducer from '../hooks/useAsyncReducerWithNotifications';
 import { fetchData, uploadFiles } from '../state/images/imageActions';
 import imageReducer, { initialState } from '../state/images/imageReducer';
 
@@ -37,11 +38,9 @@ const BotManager = (props) => {
 
   return (
     <>
-      <Grid container className={classes.formContainer}>
+      <Grid container className={classes.formContainer} spacing={4}>
         <Grid item xs={12} md={4}>
-          <form>
-            <input type="file" onChange={handleUpload} value="" multiple />
-          </form>
+          <FileUpload onChange={handleUpload} />
         </Grid>
         <Grid item xs={12} md={8}>
           <EditScheduleForm />

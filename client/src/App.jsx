@@ -1,6 +1,7 @@
 import { Container, CssBaseline, makeStyles } from "@material-ui/core";
 import axios from "axios";
 import Navbar from "./components/Navbar";
+import SnackbarProvider from './context/snackbar/provider';
 import useFetch from "./hooks/useFetch";
 import BotManager from "./pages/BotManager";
 import LandingPage from "./pages/LandingPage";
@@ -29,13 +30,13 @@ function App() {
   else display = <BotManager />;
 
   return (
-    <div>
+    <SnackbarProvider>
       <CssBaseline />
       <Navbar user={userData?.user} handleLogout={handleLogout} />
       <Container maxWidth="lg" className={classes.container}>
         {display}
       </Container>
-    </div>
+    </SnackbarProvider>
   )
 }
 

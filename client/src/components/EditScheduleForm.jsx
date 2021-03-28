@@ -1,5 +1,6 @@
-import { Button, Checkbox, FormControl, FormControlLabel, makeStyles, MenuItem, Select, TextField, Typography } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { Button, Checkbox, FormControl, FormControlLabel, makeStyles, MenuItem, Paper, Select, TextField, Typography } from '@material-ui/core';
+import { useContext, useEffect, useState } from 'react';
+import SnackbarContext from '../context/snackbar/context';
 import useAsyncService from '../hooks/useAsyncService';
 import api from '../services/api';
 
@@ -7,13 +8,26 @@ import api from '../services/api';
 const FREQUENCY_OPTIONS = [1, 2, 3, 4, 6, 8, 12, 24];
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3)
+  },
   inlineInput: {
     margin: theme.spacing(0, 1),
     padding: 0
   },
   inlineInputGroup: {
     display: "flex",
+    flexFlow: 'row wrap',
     alignItems: "baseline"
+  },
+  selectInput: {
+    overflow: 'visible'
+  },
+  header: {
+    marginBottom: theme.spacing(1)
+  },
+  submitButton: {
+    marginTop: theme.spacing(1)
   }
 }));
 
@@ -26,6 +40,7 @@ const EditScheduleForm = () => {
     enabled: false
   });
   const classes = useStyles();
+  const notify = useContext(SnackbarContext);
 
   useEffect(() => {
     if (data) {
@@ -37,7 +52,12 @@ const EditScheduleForm = () => {
     e.preventDefault();
     if (!isSaved) {
       setIsSaved(true);
-      api.updateSchedule(formData).catch(() => setIsSaved(false));
+      api.updateSchedule(formData)
+        .then(() => notify('Schedule updated successfully', 'success'))
+        .catch(() => {
+          setIsSaved(false);
+          notify('There was an error updating your schedule.')
+        });
     }
   }
 
@@ -52,14 +72,14 @@ const EditScheduleForm = () => {
   }
 
   return (
-    <div>
-      <Typography component="h2" variant="h5">Edit Schedule</Typography>
+    <Paper elevation={2} className={classes.root}>
+      <Typography component="h2" variant="h6" className={classes.header}>Edit Schedule</Typography>
       <form onSubmit={handleSubmit}>
         <div className={classes.inlineInputGroup}>
         <Typography variant="body1">
             Post every
         </Typography>
-          <FormControl variant="outlined" size="small">
+          <FormControl variant="outlined" size="small" className={classes.selectInput}>
             <Select
               name="frequency"
               aria-label="Frequency"
@@ -67,7 +87,9 @@ const EditScheduleForm = () => {
               disabled={loading}
               onChange={handleChange}
               className={classes.inlineInput}
-              
+              classes={{
+                selectMenu: classes.selectInput
+              }}
             >
               {FREQUENCY_OPTIONS.map(value => <MenuItem key={value} value={value}>{value}</MenuItem>)}
             </Select>
@@ -100,9 +122,9 @@ const EditScheduleForm = () => {
           }
         />
         <br />
-        <Button type="submit" variant="contained" disabled={isSaved} color="primary">Save</Button>
+        <Button type="submit" variant="contained" disabled={isSaved} color="primary" className={classes.submitButton}>Save</Button>
       </form>
-    </div>
+    </Paper>
   )
 }
 

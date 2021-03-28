@@ -1,4 +1,4 @@
-import { DEFAULT_FETCH_ERROR } from '../../lib/constants';
+import { DEFAULT_FETCH_ERROR, DEFAULT_UPLOAD_ERROR } from '../../lib/constants';
 import api from '../../services/api';
 
 export const actions = {
@@ -66,7 +66,7 @@ export function uploadFiles(files) {
             payload: {
               clientId: upload.clientId
             },
-            error: error.response?.data?.message || DEFAULT_FETCH_ERROR
+            error: error.response?.data?.message || DEFAULT_UPLOAD_ERROR
           })
         })
     });
@@ -84,11 +84,11 @@ export function updateImageCaption(id, caption) {
       .then(() => {
         dispatch({
           type: actions.IMAGE_CAPTION_UPDATE_SUCCESS,
-          payload: { id, caption }
+          payload: { id, caption },
+          success: 'Caption successfully updated'
         });
       })
       .catch(error => {
-        console.log(error);
         dispatch({
           type: actions.IMAGE_CAPTION_UPDATE_FAILURE,
           payload: { id },
