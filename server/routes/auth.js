@@ -17,7 +17,7 @@ router.get('/isAuthenticated', isAuthenticated, (req, res) => {
   return res.send({ user: req.user });
 });
 
-router.post('/logout', isAuthenticated, (req, res, next) => {
+router.post('/logout', isAuthenticated, (req, res) => {
   req.logOut();
   res.send({ message: 'successfully logged out' });
 });

@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   const isDevEnv = req.app.get('env') === 'development';
   if (isDevEnv) console.error(err);
 

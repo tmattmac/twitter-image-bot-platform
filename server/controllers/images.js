@@ -21,7 +21,6 @@ async function uploadImage(req, res, next) {
       url: `/api/images/${fileId}`,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -41,7 +40,6 @@ async function getImages(req, res, next) {
 
     res.send({ files: responseObject });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -55,7 +53,6 @@ async function getImage(req, res, next) {
       .setHeader('Cache-Control', 'public, max-age=31536000');
     file.pipe(res);
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -64,14 +61,13 @@ async function updateImageMetadata(req, res, next) {
   try {
     const metadata = req.body.metadata;
     const fileId = req.params.id;
-    const response = await updateFileMetadata(req.user.id, fileId, metadata);
+    await updateFileMetadata(req.user.id, fileId, metadata);
     res.send({
       message: 'successfully updated metadata',
       id: fileId,
       metadata,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }
@@ -79,13 +75,12 @@ async function updateImageMetadata(req, res, next) {
 async function deleteImage(req, res, next) {
   try {
     const fileId = req.params.id;
-    const response = await deleteFile(req.user.id, fileId);
+    await deleteFile(req.user.id, fileId);
     res.send({
       message: 'successfully deleted file',
       id: fileId,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 }

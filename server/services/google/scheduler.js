@@ -18,7 +18,7 @@ async function createJob(id) {
   );
   const name = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
 
-  await client.createJob({
+  const job = await client.createJob({
     parent,
     job: {
       name,
@@ -42,7 +42,6 @@ async function updateJob(id, options) {
   const name = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
 
   const { schedule, enabled, timeZone } = options;
-  const updateMask = generateUpdateMask(options);
 
   let job = await client.updateJob({
     job: {
@@ -68,28 +67,6 @@ async function getJob(id) {
   const name = client.jobPath(GCLOUD_PROJECT_ID, GCLOUD_DEFAULT_LOCATION, id);
   const job = await client.getJob({ name });
   return job[0];
-}
-
-function generateUpdateMask(options) {
-  const mask = [];
-
-  if (options.enabled) {
-    mask.push('pubsubTarget.attributes.enabled');
-  }
-
-  if (options.schedule) {
-    mask.push('schedule');
-  }
-
-  if (options.repeatAllowance) {
-    mask.push('pubsubTarget.attributes.repeatAllowance');
-  }
-
-  if (options.timeZone) {
-    mask.push('timeZone');
-  }
-
-  return mask;
 }
 
 module.exports = {

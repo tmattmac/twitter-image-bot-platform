@@ -1,8 +1,4 @@
-const {
-  updateJob,
-  createJob,
-  getJob,
-} = require('../services/google/scheduler');
+const { updateJob, getJob } = require('../services/google/scheduler');
 const {
   scheduleObjectToText,
   scheduleTextToObject,
@@ -29,8 +25,7 @@ async function updateSchedule(req, res, next) {
     }
     options.schedule = scheduleObjectToText(options);
 
-    const job = await updateJob(req.user.id, options);
-    console.dir(job);
+    await updateJob(req.user.id, options);
     res.send({ message: 'Job updated successfully' });
   } catch (err) {
     next(err);
