@@ -21,12 +21,12 @@ const useStyles = makeStyles(theme => ({
   dropArea: {
     width: '100%',
     height: '100%',
-    padding: theme.spacing(2, 1),
+    padding: theme.spacing(8, 1),
     display: 'flex',
     flexFlow: 'column nowrap',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '5px dashed rgba(0,0,0,0.25)',
+    border: '3px dashed rgba(0,0,0,0.25)',
     borderRadius: theme.spacing(1)
   }
 }));

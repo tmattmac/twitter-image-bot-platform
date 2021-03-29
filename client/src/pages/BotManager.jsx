@@ -39,10 +39,10 @@ const BotManager = (props) => {
   return (
     <>
       <Grid container className={classes.formContainer} spacing={4}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <FileUpload onChange={handleUpload} />
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={6}>
           <EditScheduleForm />
         </Grid>
       </Grid>
