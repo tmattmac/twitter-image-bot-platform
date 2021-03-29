@@ -9,7 +9,9 @@ function getMinuteBefore(time) {
   if (hours < 0) {
     hours = 23;
   }
-  return [hours, minutes].join(':').padStart(time.length, '0');
+  return [hours, minutes]
+    .map((time) => time.toString().padStart(2, '0'))
+    .join(':');
 }
 
 // https://stackoverflow.com/a/44118363
