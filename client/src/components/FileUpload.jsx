@@ -8,11 +8,7 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     height: '100%',
-    padding: theme.spacing(3),
-    display: 'flex',
-    flexFlow: 'column nowrap',
-    alignItems: 'center',
-    justifyContent: 'center'
+    padding: theme.spacing(2)
   },
   label: {
     marginBottom: theme.spacing(1),
@@ -21,6 +17,17 @@ const useStyles = makeStyles(theme => ({
   },
   dragging: {
     backgroundColor: '#F1F2FA'
+  },
+  dropArea: {
+    width: '100%',
+    height: '100%',
+    padding: theme.spacing(2, 1),
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '5px dashed rgba(0,0,0,0.25)',
+    borderRadius: theme.spacing(1)
   }
 }));
 
@@ -43,16 +50,16 @@ const FileUpload = ({ onChange }) => {
   } = useDropzone({ onDrop, onDropRejected, accept: 'image/*' });
 
   return (
-    <Paper
-      {...getRootProps({
-        elevation: 2,
-        className: clsx(classes.root, {
+    <Paper elevation={2} className={classes.root}>
+      <div {...getRootProps({
+        className: clsx(classes.dropArea, {
           [classes.dragging]: isDragActive
         })
       })}>
-        <input {...getInputProps()} multiple />
+      <input {...getInputProps()} multiple />
       <Typography variant="h6" className={classes.label}>Drag and drop or click to upload</Typography>
-      <Button color="primary" variant="contained">Upload Files</Button>
+        <Button color="primary" variant="contained">Upload Files</Button>
+      </div>
     </Paper>
   )
 }
