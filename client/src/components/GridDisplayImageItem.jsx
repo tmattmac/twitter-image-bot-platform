@@ -2,7 +2,6 @@ import {
   Card,
   CardActionArea,
   CardMedia,
-  Fade,
   Grid,
   makeStyles,
 } from '@material-ui/core';
@@ -30,25 +29,26 @@ const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
   return (
     <Grid item xs={12} sm={6} md={3}>
       <LazyLoad height={200} offset={100} once>
-        <Fade in={!isLoading}>
-          <Card className={classes.card}>
-            <LoadingOverlay
-              isLoading={
-                image.status.upload.pending || image.status.delete.pending
-              }
+        <Card className={classes.card}>
+          <LoadingOverlay
+            isLoading={
+              image.status.upload.pending ||
+              image.status.delete.pending ||
+              isLoading
+            }
+            transparent={!isLoading}
+          />
+          <CardActionArea>
+            <CardMedia
+              image={image.url}
+              title={image.id}
+              className={classes.image}
+              component="img"
+              onLoad={() => setIsLoading(false)}
+              onClick={() => handleClick()}
             />
-            <CardActionArea>
-              <CardMedia
-                image={image.url}
-                title={image.id}
-                className={classes.image}
-                component="img"
-                onLoad={() => setIsLoading(false)}
-                onClick={() => handleClick()}
-              />
-            </CardActionArea>
-          </Card>
-        </Fade>
+          </CardActionArea>
+        </Card>
       </LazyLoad>
     </Grid>
   );
