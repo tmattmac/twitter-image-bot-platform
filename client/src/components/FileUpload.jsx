@@ -1,22 +1,22 @@
-import { Button, makeStyles, Paper, Typography } from "@material-ui/core";
+import { Button, makeStyles, Paper, Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import { useCallback, useContext } from "react";
+import { useCallback, useContext } from 'react';
 import { useDropzone } from 'react-dropzone';
 import SnackbarContext from '../context/snackbar/context';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     height: '100%',
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   label: {
     marginBottom: theme.spacing(1),
     textAlign: 'center',
-    lineHeight: 1.25
+    lineHeight: 1.25,
   },
   dragging: {
-    backgroundColor: '#F1F2FA'
+    backgroundColor: '#F1F2FA',
   },
   dropArea: {
     width: '100%',
@@ -27,8 +27,8 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     border: '3px dashed rgba(0,0,0,0.25)',
-    borderRadius: theme.spacing(1)
-  }
+    borderRadius: theme.spacing(1),
+  },
 }));
 
 const FileUpload = ({ onChange }) => {
@@ -40,28 +40,35 @@ const FileUpload = ({ onChange }) => {
   }, []);
 
   const onDropRejected = useCallback(() => {
-    notify('Some files were not uploaded. Make sure all your files are image files.')
-  }, [notify])
+    notify(
+      'Some files were not uploaded. Make sure all your files are image files.'
+    );
+  }, [notify]);
 
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive
-  } = useDropzone({ onDrop, onDropRejected, accept: 'image/*' });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    onDropRejected,
+    accept: 'image/*',
+  });
 
   return (
     <Paper elevation={2} className={classes.root}>
-      <div {...getRootProps({
-        className: clsx(classes.dropArea, {
-          [classes.dragging]: isDragActive
-        })
-      })}>
-      <input {...getInputProps()} multiple />
-      <Typography variant="h6" className={classes.label}>Drag and drop or click to upload</Typography>
-        <Button color="primary" variant="contained">Upload Files</Button>
+      <div
+        {...getRootProps({
+          className: clsx(classes.dropArea, {
+            [classes.dragging]: isDragActive,
+          }),
+        })}>
+        <input {...getInputProps()} multiple />
+        <Typography variant="h6" className={classes.label}>
+          Drag and drop or click to upload
+        </Typography>
+        <Button color="primary" variant="contained">
+          Upload Files
+        </Button>
       </div>
     </Paper>
-  )
-}
+  );
+};
 
 export default FileUpload;

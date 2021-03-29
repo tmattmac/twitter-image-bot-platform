@@ -95,8 +95,7 @@ const EditScheduleForm = () => {
           margin="normal"
           fullWidth
           required
-          InputLabelProps={{ required: false }}
-        >
+          InputLabelProps={{ required: false }}>
           {FREQUENCY_OPTIONS.map((value) => (
             <MenuItem key={value} value={value}>
               {value === 1 ? 'every hour' : `every ${value} hours`}
@@ -137,8 +136,7 @@ const EditScheduleForm = () => {
           variant="contained"
           disabled={isSaved}
           color="primary"
-          className={classes.submitButton}
-        >
+          className={classes.submitButton}>
           Save
         </Button>
       </form>

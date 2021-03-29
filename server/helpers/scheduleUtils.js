@@ -1,6 +1,6 @@
 function getMinuteBefore(time) {
   if (!isValidTime(time)) throw new Error('invalid time format');
-  let [hours, minutes] = time.split(':').map(num => +num);
+  let [hours, minutes] = time.split(':').map((num) => +num);
   minutes--;
   if (minutes < 0) {
     hours--;
@@ -15,15 +15,14 @@ function getMinuteBefore(time) {
 // https://stackoverflow.com/a/44118363
 function isValidTimeZone(tz) {
   if (!Intl || !Intl.DateTimeFormat().resolvedOptions().timeZone) {
-      throw 'Time zones are not available in this environment';
+    throw 'Time zones are not available in this environment';
   }
 
   try {
-      Intl.DateTimeFormat(undefined, {timeZone: tz});
-      return true;
-  }
-  catch (ex) {
-      return false;
+    Intl.DateTimeFormat(undefined, { timeZone: tz });
+    return true;
+  } catch (ex) {
+    return false;
   }
 }
 
@@ -35,7 +34,9 @@ function isValidTime(time) {
 function validateSchedule(scheduleObject) {
   const { frequency, startTime, timeZone } = scheduleObject;
   if (frequency < 1 || frequency > 24 || 24 % frequency > 0) {
-    throw new Error('invalid frequency provided; should be between 1-24 and divisible by 24');
+    throw new Error(
+      'invalid frequency provided; should be between 1-24 and divisible by 24'
+    );
   }
   if (!isValidTime(startTime)) {
     throw new Error('invalid startTime provided');
@@ -46,7 +47,11 @@ function validateSchedule(scheduleObject) {
 }
 
 function scheduleTextToObject(scheduleText) {
-  if (!/^(every \d{1,2} hours from \d{1,2}:[0-5]\d to \d{1,2}:[0-5]\d)$/.test(scheduleText)) {
+  if (
+    !/^(every \d{1,2} hours from \d{1,2}:[0-5]\d to \d{1,2}:[0-5]\d)$/.test(
+      scheduleText
+    )
+  ) {
     throw new Error('unexpected invalid schedule text');
   }
   const startTime = scheduleText.match(/(\d{1,2}:\d{2})/)[0];
@@ -60,11 +65,13 @@ function scheduleTextToObject(scheduleText) {
 function scheduleObjectToText(scheduleObject) {
   validateSchedule(scheduleObject);
   const { startTime, frequency } = scheduleObject;
-  return `every ${frequency} hours from ${startTime} to ${getMinuteBefore(startTime)}`;
+  return `every ${frequency} hours from ${startTime} to ${getMinuteBefore(
+    startTime
+  )}`;
 }
 
 module.exports = {
   validateSchedule,
   scheduleTextToObject,
-  scheduleObjectToText
-}
+  scheduleObjectToText,
+};

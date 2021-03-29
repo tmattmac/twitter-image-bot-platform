@@ -4,21 +4,22 @@ import { v4 as uuid } from 'uuid';
 const isImage = (file) => file.type.startsWith('image');
 
 class APIClient {
-
   constructor() {
     this._axios = axios.create({
-      baseURL: '/api'
+      baseURL: '/api',
     });
     this._uploadQueue = []; // TODO: Use an actual queue implementation
     this.uploadFile = this.uploadFile.bind(this);
   }
 
   getAll() {
-    return this._axios.get('/images').then(response => response.data.files);
+    return this._axios.get('/images').then((response) => response.data.files);
   }
 
   update(id, metadata) {
-    return this._axios.patch(`/images/${id}`, { metadata }).then(response => response.data);
+    return this._axios
+      .patch(`/images/${id}`, { metadata })
+      .then((response) => response.data);
   }
 
   queueFileUploads(fileList) {
@@ -27,10 +28,10 @@ class APIClient {
 
     const uploads = [];
 
-    [...fileList].forEach(file => {
+    [...fileList].forEach((file) => {
       if (!isImage(file)) return; // consider showing an error instead
       const clientId = uuid();
-      
+
       const request = new Promise((resolve, reject) => {
         const upload = () => {
           uploadFile(file)
@@ -42,19 +43,19 @@ class APIClient {
                 nextUpload();
               }
             });
-        }
+        };
         queue.push(upload);
       });
 
       uploads.push({
         clientId,
         request,
-        file
+        file,
       });
     });
 
     // immediately dequeue first set of uploads
-    queue.splice(0, 5).forEach(upload => upload());
+    queue.splice(0, 5).forEach((upload) => upload());
 
     return uploads;
   }
@@ -66,7 +67,8 @@ class APIClient {
     const _axios = this._axios;
 
     return new Promise((resolve, reject) => {
-      _axios.post('/images', formData)
+      _axios
+        .post('/images', formData)
         .then((response) => resolve(response.data))
         .catch(reject);
     });
@@ -77,7 +79,9 @@ class APIClient {
   }
 
   getSchedule() {
-    return this._axios.get('/schedule').then(response => response.data.options)
+    return this._axios
+      .get('/schedule')
+      .then((response) => response.data.options);
   }
 
   updateSchedule(options) {
@@ -86,8 +90,8 @@ class APIClient {
     return this._axios.patch('/schedule', {
       options: {
         ...options,
-        timeZone
-      }
+        timeZone,
+      },
     });
   }
 }

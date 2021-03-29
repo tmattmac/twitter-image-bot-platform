@@ -1,9 +1,5 @@
-
 function LandingPage() {
-
-  return (
-    <p>Nothing here yet</p>
-  )
+  return <p>Nothing here yet</p>;
 }
 
 export default LandingPage;

@@ -10,7 +10,9 @@ const useAsyncService = (service, method) => {
     setLoading(true);
 
     if (typeof service[method] !== 'function') {
-      throw new Error('useAsyncService requires the second argument to be a valid method name');
+      throw new Error(
+        'useAsyncService requires the second argument to be a valid method name'
+      );
     }
 
     try {
@@ -20,15 +22,15 @@ const useAsyncService = (service, method) => {
       console.log(err);
       setError(err.response?.data?.message || DEFAULT_FETCH_ERROR);
     }
-    
+
     setLoading(false);
   }, [service, method]);
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  return [data, loading, error]; 
-}
+  return [data, loading, error];
+};
 
 export default useAsyncService;

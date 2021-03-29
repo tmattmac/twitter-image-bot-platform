@@ -11,17 +11,17 @@ const useFetch = (url, method = 'GET', dataTransform) => {
     setLoading(true);
 
     // send response and catch error
-    const response = await axios({ url, method })
-      .catch(err => {
-        setError(err.response?.data?.message || DEFAULT_FETCH_ERROR);
-        return null;
-      });
-    
+    const response = await axios({ url, method }).catch((err) => {
+      setError(err.response?.data?.message || DEFAULT_FETCH_ERROR);
+      return null;
+    });
+
     // attempt to transform data from server using provided function
     if (response) {
       try {
-        const transformedData =
-          dataTransform ? dataTransform(response.data) : response.data;
+        const transformedData = dataTransform
+          ? dataTransform(response.data)
+          : response.data;
         setData(transformedData);
       } catch (err) {
         setError(DEFAULT_FETCH_ERROR);
@@ -31,11 +31,11 @@ const useFetch = (url, method = 'GET', dataTransform) => {
     setLoading(false);
   }, [url, method, dataTransform]);
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return [data, loading, error, fetchData, setData]; // fetchData => retry request
-}
+};
 
 export default useFetch;

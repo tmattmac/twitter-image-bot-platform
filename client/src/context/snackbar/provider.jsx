@@ -1,7 +1,7 @@
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
-import { useCallback, useEffect, useState } from "react";
-import SnackbarContext from "./context";
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import { useCallback, useEffect, useState } from 'react';
+import SnackbarContext from './context';
 
 const SnackbarProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ const SnackbarProvider = ({ children }) => {
   }, []);
 
   const handleClose = (e, reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
     setOpen(false);
@@ -45,14 +45,12 @@ const SnackbarProvider = ({ children }) => {
         autoHideDuration={6000}
         open={open}
         onClose={handleClose}
-        onExited={handleExited}
-      >
+        onExited={handleExited}>
         <Alert
-          severity={messageInfo?.severity || "error"}
+          severity={messageInfo?.severity || 'error'}
           variant="filled"
           onClose={handleClose}
-          elevation={4}
-        >
+          elevation={4}>
           {messageInfo?.message}
         </Alert>
       </Snackbar>

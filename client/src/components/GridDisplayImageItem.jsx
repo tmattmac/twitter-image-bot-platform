@@ -1,25 +1,29 @@
-import { Card, CardActionArea, CardMedia, Fade, Grid, makeStyles } from "@material-ui/core";
+import {
+  Card,
+  CardActionArea,
+  CardMedia,
+  Fade,
+  Grid,
+  makeStyles,
+} from '@material-ui/core';
 import { useState } from 'react';
 import LazyLoad from 'react-lazyload';
-import LoadingOverlay from "./LoadingOverlay";
+import LoadingOverlay from './LoadingOverlay';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-
-  },
+const useStyles = makeStyles((theme) => ({
+  root: {},
   image: {
     height: 200,
     [theme.breakpoints.down('xs')]: {
-      height: "30vh"
-    }
+      height: '30vh',
+    },
   },
   card: {
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 }));
 
 const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
-
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +32,11 @@ const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
       <LazyLoad height={200} offset={100} once>
         <Fade in={!isLoading}>
           <Card className={classes.card}>
-            <LoadingOverlay isLoading={image.status.upload.pending || image.status.delete.pending} />
+            <LoadingOverlay
+              isLoading={
+                image.status.upload.pending || image.status.delete.pending
+              }
+            />
             <CardActionArea>
               <CardMedia
                 image={image.url}
@@ -43,8 +51,7 @@ const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
         </Fade>
       </LazyLoad>
     </Grid>
-  )
-
-}
+  );
+};
 
 export default GridDisplayImageItem;

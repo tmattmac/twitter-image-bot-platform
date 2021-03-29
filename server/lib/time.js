@@ -9,5 +9,5 @@ module.exports = {
   MINUTES,
   HOURS,
   DAYS,
-  WEEKS
-}
+  WEEKS,
+};

@@ -1,5 +1,13 @@
-const { updateJob, createJob, getJob } = require('../services/google/scheduler');
-const { scheduleObjectToText, scheduleTextToObject, validateSchedule } = require('../helpers/scheduleUtils');
+const {
+  updateJob,
+  createJob,
+  getJob,
+} = require('../services/google/scheduler');
+const {
+  scheduleObjectToText,
+  scheduleTextToObject,
+  validateSchedule,
+} = require('../helpers/scheduleUtils');
 
 /**
  * options:
@@ -55,5 +63,5 @@ async function getSchedule(req, res, next) {
 
 module.exports = {
   updateSchedule,
-  getSchedule
-}
+  getSchedule,
+};

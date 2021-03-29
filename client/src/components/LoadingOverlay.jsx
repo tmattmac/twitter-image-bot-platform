@@ -1,7 +1,7 @@
 import { CircularProgress, Fade, makeStyles } from '@material-ui/core';
 import React from 'react';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: 'absolute',
     left: 0,
@@ -12,12 +12,12 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 2
+    zIndex: 2,
   },
   progress: {
     position: 'relative',
-    color: 'white'
-  }
+    color: 'white',
+  },
 }));
 
 // note, only use in positioned elements
@@ -30,6 +30,6 @@ const LoadingOverlay = ({ isLoading }) => {
       </div>
     </Fade>
   );
-}
+};
 
 export default LoadingOverlay;

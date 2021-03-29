@@ -10,24 +10,24 @@ const defaultImageState = {
     upload: {
       pending: false,
       error: null,
-      file: null
+      file: null,
     },
     edit: {
       pending: false,
-      error: null
+      error: null,
     },
     delete: {
       pending: false,
-      error: null
-    }
-  }
-}
+      error: null,
+    },
+  },
+};
 
 export const initialState = {
   images: [],
   loaded: false,
   error: null,
-}
+};
 
 export default (state, action) => {
   switch (action.type) {
@@ -36,23 +36,23 @@ export default (state, action) => {
         ...state,
         loaded: true,
         error: null,
-        images: action.payload.map(image => {
+        images: action.payload.map((image) => {
           return defaultsDeep(
             pick(image, ['id', 'url', 'caption']),
             defaultImageState
-          )
-        })
-      }
-    
+          );
+        }),
+      };
+
     case actions.FETCH_DATA_FAILURE:
       return {
         ...state,
         loaded: false,
-        error: action.error
-      }
-    
+        error: action.error,
+      };
+
     case actions.IMAGE_UPLOAD:
-      const newImages = action.payload.map(image => {
+      const newImages = action.payload.map((image) => {
         const newImage = defaultsDeep(
           pick(image, ['clientId', 'url']),
           defaultImageState
@@ -63,13 +63,13 @@ export default (state, action) => {
       });
       return {
         ...state,
-        images: [...newImages, ...state.images]
-      }
-    
+        images: [...newImages, ...state.images],
+      };
+
     case actions.IMAGE_UPLOAD_SUCCESS:
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.clientId === action.payload.clientId) {
             return {
               ...image,
@@ -79,19 +79,19 @@ export default (state, action) => {
                 upload: {
                   pending: false,
                   file: null,
-                  error: null
-                }
-              }
-            }
+                  error: null,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
+        }),
+      };
+
     case actions.IMAGE_UPLOAD_FAILURE:
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.clientId === action.payload.clientId) {
             return {
               ...image,
@@ -100,19 +100,19 @@ export default (state, action) => {
                 upload: {
                   ...image.status.upload,
                   pending: false,
-                  error: action.error
-                }
-              }
-            }
+                  error: action.error,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
+        }),
+      };
+
     case actions.IMAGE_UPLOAD_RETRY:
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.clientId === action.payload.clientId) {
             return {
               ...image,
@@ -121,19 +121,19 @@ export default (state, action) => {
                 upload: {
                   ...image.status.upload,
                   pending: true,
-                  error: null
-                }
-              }
-            }
+                  error: null,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
+        }),
+      };
+
     case actions.IMAGE_CAPTION_UPDATE:
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.id === action.payload.id) {
             return {
               ...image,
@@ -141,19 +141,19 @@ export default (state, action) => {
                 ...image.status,
                 edit: {
                   pending: true,
-                  error: null
-                }
-              }
-            }
+                  error: null,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
+        }),
+      };
+
     case actions.IMAGE_CAPTION_UPDATE_SUCCESS:
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.id === action.payload.id) {
             return {
               ...image,
@@ -162,19 +162,19 @@ export default (state, action) => {
                 ...image.status,
                 edit: {
                   pending: false,
-                  error: null
-                }
-              }
-            }
+                  error: null,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
+        }),
+      };
+
     case actions.IMAGE_CAPTION_UPDATE_FAILURE:
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.id === action.payload.id) {
             return {
               ...image,
@@ -182,20 +182,20 @@ export default (state, action) => {
                 ...image.status,
                 edit: {
                   pending: false,
-                  error: action.error
-                }
-              }
-            }
+                  error: action.error,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
+        }),
+      };
+
     case actions.IMAGE_CAPTION_CLEAR_ERROR:
-      console.log(action.payload.id)
+      console.log(action.payload.id);
       return {
         ...state,
-        images: state.images.map(image => {
+        images: state.images.map((image) => {
           if (image.id === action.payload.id) {
             return {
               ...image,
@@ -203,64 +203,64 @@ export default (state, action) => {
                 ...image.status,
                 edit: {
                   ...image.status.edit,
-                  error: null
-                }
-              }
-            }
+                  error: null,
+                },
+              },
+            };
           }
           return image;
-        })
-      }
-    
-      case actions.IMAGE_DELETE:
-        return {
-          ...state,
-          images: state.images.map(image => {
-            if (image.id === action.payload.id) {
-              return {
-                ...image,
-                status: {
-                  ...image.status,
-                  delete: {
-                    pending: true,
-                    error: null
-                  }
-                }
-              }
-            }
-            return image;
-          })
-        }
-      
-      case actions.IMAGE_DELETE_SUCCESS:
-        return {
-          ...state,
-          images: state.images.filter(image => {
-            if (image.id === action.payload.id) {
-              return false;
-            }
-            return image;
-          })
-        }
-      
-      case actions.IMAGE_DELETE_FAILURE:
-        return {
-          ...state,
-          images: state.images.map(image => {
-            if (image.id === action.payload.id) {
-              return {
-                ...image,
-                status: {
-                  ...image.status,
-                  delete: {
-                    pending: false,
-                    error: action.error
-                  }
-                }
-              }
-            }
-            return image;
-          })
-        }
+        }),
+      };
+
+    case actions.IMAGE_DELETE:
+      return {
+        ...state,
+        images: state.images.map((image) => {
+          if (image.id === action.payload.id) {
+            return {
+              ...image,
+              status: {
+                ...image.status,
+                delete: {
+                  pending: true,
+                  error: null,
+                },
+              },
+            };
+          }
+          return image;
+        }),
+      };
+
+    case actions.IMAGE_DELETE_SUCCESS:
+      return {
+        ...state,
+        images: state.images.filter((image) => {
+          if (image.id === action.payload.id) {
+            return false;
+          }
+          return image;
+        }),
+      };
+
+    case actions.IMAGE_DELETE_FAILURE:
+      return {
+        ...state,
+        images: state.images.map((image) => {
+          if (image.id === action.payload.id) {
+            return {
+              ...image,
+              status: {
+                ...image.status,
+                delete: {
+                  pending: false,
+                  error: action.error,
+                },
+              },
+            };
+          }
+          return image;
+        }),
+      };
   }
-}
+};

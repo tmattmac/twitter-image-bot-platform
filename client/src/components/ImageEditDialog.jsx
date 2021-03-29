@@ -1,14 +1,28 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, makeStyles, TextField, useMediaQuery, useTheme } from "@material-ui/core";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  makeStyles,
+  TextField,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 import clsx from 'clsx';
-import { useCallback, useEffect, useState } from "react";
-import useConfirmationDialog from "../hooks/useConfirmationDialog";
-import { clearEditError, deleteImage, updateImageCaption } from "../state/images/imageActions";
+import { useCallback, useEffect, useState } from 'react';
+import useConfirmationDialog from '../hooks/useConfirmationDialog';
+import {
+  clearEditError,
+  deleteImage,
+  updateImageCaption,
+} from '../state/images/imageActions';
 import ConfirmationDialog from './ConfirmationDialog';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   dialogWrapper: {
     display: 'flex',
-    flexFlow: 'column nowrap'
+    flexFlow: 'column nowrap',
   },
   image: {
     maxWidth: '100%',
@@ -16,23 +30,28 @@ const useStyles = makeStyles(theme => ({
     minHeight: 100,
     maxHeight: '60vh',
     margin: '0 auto',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   dialogContent: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   form: {
     width: '100%',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   formInput: {
-    flexGrow: 2
-  }
+    flexGrow: 2,
+  },
 }));
 
-const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch }) => {
+const ImageEditDialog = ({
+  image,
+  open,
+  handleClose: handleCloseDialog,
+  dispatch,
+}) => {
   const [displayImage, setDisplayImage] = useState(image);
   const [caption, setCaption] = useState('');
   const [isSaved, setIsSaved] = useState(true);
@@ -56,46 +75,48 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch
       setIsSaved(!image.status.edit.error);
       return () => {
         if (error) dispatch(clearEditError(image.id));
-      }
+      };
     }
-
   }, [image]);
 
   const handleFormChange = (event) => {
     setCaption(event.target.value);
     setIsSaved(false);
-  }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setIsSaved(true);
     dispatch(updateImageCaption(image.id, caption));
-  }
+  };
 
   const handleDelete = () => {
     openDialog({
       handleConfirm: () => {
         dispatch(deleteImage(image.id));
         handleCloseDialog();
-      }
-    })
-  }
+      },
+    });
+  };
 
   return (
     <Dialog
       open={open}
       onClose={handleClose}
-      scroll={fullScreen ? "paper" : "body"}
+      scroll={fullScreen ? 'paper' : 'body'}
       fullScreen={fullScreen}
       maxWidth="lg"
       fullWidth
       PaperProps={{
-        className: clsx({ [classes.dialogWrapper]: fullScreen })
-      }}
-    >
+        className: clsx({ [classes.dialogWrapper]: fullScreen }),
+      }}>
       <DialogTitle>Edit Image Caption</DialogTitle>
       <DialogContent className={classes.dialogContent} dividers>
-        <img src={displayImage?.url} alt={displayImage?.id} className={classes.image} />
+        <img
+          src={displayImage?.url}
+          alt={displayImage?.id}
+          className={classes.image}
+        />
       </DialogContent>
       <DialogActions>
         <form onSubmit={handleSubmit} className={classes.form}>
@@ -122,7 +143,7 @@ const ImageEditDialog = ({ image, open, handleClose: handleCloseDialog, dispatch
       </DialogActions>
       <ConfirmationDialog {...getDialogProps()} />
     </Dialog>
-  )
-}
+  );
+};
 
 export default ImageEditDialog;

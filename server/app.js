@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const fileUpload = require('express-fileupload');
 const session = require('express-session');
-const passport = require('passport')
+const passport = require('passport');
 const knexSession = require('connect-session-knex')(session);
 const db = require('./services/db');
 const { DAYS } = require('./lib/time');
@@ -13,9 +13,7 @@ const { DAYS } = require('./lib/time');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 
-
 const app = express();
-
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -25,16 +23,18 @@ app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1);
 
-app.use(session({
-  secret: process.env.SECRET_KEY,
-  store: new knexSession({ knex: db }),
-  resave: true,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 1 * DAYS,
-    secure: false
-  }
-})); // TODO: Add secure session options
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    store: new knexSession({ knex: db }),
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1 * DAYS,
+      secure: false,
+    },
+  })
+); // TODO: Add secure session options
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,7 +42,7 @@ app.use('/api', indexRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 

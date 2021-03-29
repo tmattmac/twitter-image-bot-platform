@@ -8,14 +8,13 @@ import useAsyncReducer from '../hooks/useAsyncReducerWithNotifications';
 import { fetchData, uploadFiles } from '../state/images/imageActions';
 import imageReducer, { initialState } from '../state/images/imageReducer';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formContainer: {
-    marginBottom: theme.spacing(2)
-  }
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 const BotManager = (props) => {
-
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [state, dispatch] = useAsyncReducer(imageReducer, initialState);
   const classes = useStyles();
@@ -26,15 +25,16 @@ const BotManager = (props) => {
 
   const handleUpload = (e) => {
     dispatch(uploadFiles(e.target.files));
-  }
+  };
 
   const handleClickImage = (idx) => {
     setSelectedImageIndex(idx);
-  }
+  };
 
   const handleCloseDialog = () => setSelectedImageIndex(null);
 
-  const selectedImage = selectedImageIndex === null ? null : state.images[selectedImageIndex];
+  const selectedImage =
+    selectedImageIndex === null ? null : state.images[selectedImageIndex];
 
   return (
     <>
@@ -46,12 +46,19 @@ const BotManager = (props) => {
           <EditScheduleForm />
         </Grid>
       </Grid>
-      
-      
-      <GridDisplayImageList images={state.images} handleClickImage={handleClickImage} />
-      <ImageEditDialog open={!!selectedImage} handleClose={handleCloseDialog} image={selectedImage} dispatch={dispatch} />
+
+      <GridDisplayImageList
+        images={state.images}
+        handleClickImage={handleClickImage}
+      />
+      <ImageEditDialog
+        open={!!selectedImage}
+        handleClose={handleCloseDialog}
+        image={selectedImage}
+        dispatch={dispatch}
+      />
     </>
-  )
-}
+  );
+};
 
 export default BotManager;

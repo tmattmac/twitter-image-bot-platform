@@ -1,15 +1,15 @@
-import { Grid, makeStyles } from "@material-ui/core";
-import GridDisplayImageItem from "./GridDisplayImageItem";
+import { Grid, makeStyles } from '@material-ui/core';
+import GridDisplayImageItem from './GridDisplayImageItem';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   image: {
-    objectFit: 'cover'
-  }
-}))
+    objectFit: 'cover',
+  },
+}));
 
 const GridDisplayImageList = ({ images, handleClickImage }) => {
   const classes = useStyles();
-  
+
   return (
     <Grid container spacing={2}>
       {images.map((image, idx) => (
@@ -20,7 +20,7 @@ const GridDisplayImageList = ({ images, handleClickImage }) => {
         />
       ))}
     </Grid>
-  )
-}
+  );
+};
 
 export default GridDisplayImageList;

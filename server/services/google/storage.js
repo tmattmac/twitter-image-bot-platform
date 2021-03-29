@@ -11,24 +11,22 @@ async function createBucket(id) {
 }
 
 function uploadToBucket(id, inputFileBuffer, contentType) {
-
   return new Promise((resolve, reject) => {
     const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
     const fileId = uuid();
     const fileObject = bucket.file(`${id}/${fileId}`);
-    
+
     // TODO: Set caching metadata on file
     const output = fileObject.createWriteStream({
       resumable: false,
       metadata: {
-        contentType
-      }
+        contentType,
+      },
     });
 
     output.on('finish', () => resolve(fileId));
     output.on('error', (err) => reject(err));
     inputFileBuffer.pipe(output);
-
   });
 }
 
@@ -49,27 +47,27 @@ async function getFileFromBucket(id, fileId) {
 function updateFileMetadata(id, fileId, metadata) {
   const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
   const file = bucket.file(`${id}/${fileId}`);
-  
+
   const { caption } = metadata;
   return file.setMetadata({
     metadata: {
-      caption
-    }
+      caption,
+    },
   });
 }
 
 function deleteFile(id, fileId) {
   const bucket = storage.bucket(GCLOUD_BUCKET_NAME);
   const file = bucket.file(`${id}/${fileId}`);
-  
+
   return file.delete();
 }
 
-module.exports = { 
+module.exports = {
   createBucket,
   uploadToBucket,
   getFilesFromBucket,
   getFileFromBucket,
   updateFileMetadata,
-  deleteFile
-}
+  deleteFile,
+};

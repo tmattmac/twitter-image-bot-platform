@@ -6,22 +6,20 @@ const getOrCreateUser = async (id, profile, token, tokenSecret) => {
       id,
       display_name: profile.displayName,
       twitter_oauth_token: token,
-      twitter_oauth_secret: tokenSecret
+      twitter_oauth_secret: tokenSecret,
     })
-    .onConflict('id').merge()
+    .onConflict('id')
+    .merge()
     .returning(['id', 'display_name']);
   return user;
-}
+};
 
 const getUser = async (id) => {
-  const [user] = await knex('users')
-    .column('id', 'display_name')
-    .where({ id });
+  const [user] = await knex('users').column('id', 'display_name').where({ id });
   return user;
-}
-
+};
 
 module.exports = {
   getUser,
-  getOrCreateUser
-}
+  getOrCreateUser,
+};
