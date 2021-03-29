@@ -35,7 +35,7 @@ const useFetch = (url, method = 'GET', dataTransform) => {
     fetchData();
   }, [fetchData]);
 
-  return [data, loading, error, fetchData, setData]; // fetchData => retry request
+  return { data, loading, error, fetchData, setData }; // fetchData => retry request
 };
 
 export default useFetch;

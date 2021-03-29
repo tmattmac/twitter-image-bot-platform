@@ -52,7 +52,10 @@ const EditScheduleForm = () => {
     if (data) {
       setFormData({ ...data });
     }
-  }, [data]);
+    if (error) {
+      notify('There was an error fetching the schedule.');
+    }
+  }, [notify, data, error]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -92,7 +95,6 @@ const EditScheduleForm = () => {
           value={formData.frequency}
           disabled={loading}
           onChange={handleChange}
-          margin="normal"
           fullWidth
           required
           InputLabelProps={{ required: false }}>

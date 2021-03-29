@@ -77,7 +77,7 @@ const ImageEditDialog = ({
         if (error) dispatch(clearEditError(image.id));
       };
     }
-  }, [image]);
+  }, [image, dispatch]);
 
   const handleFormChange = (event) => {
     setCaption(event.target.value);

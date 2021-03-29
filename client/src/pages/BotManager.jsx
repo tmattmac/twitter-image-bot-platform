@@ -1,5 +1,5 @@
 import { Grid, makeStyles } from '@material-ui/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import EditScheduleForm from '../components/EditScheduleForm';
 import FileUpload from '../components/FileUpload';
 import GridDisplayImageList from '../components/GridDisplayImageList';
@@ -23,9 +23,12 @@ const BotManager = (props) => {
     dispatch(fetchData());
   }, [dispatch]);
 
-  const handleUpload = (e) => {
-    dispatch(uploadFiles(e.target.files));
-  };
+  const handleUpload = useCallback(
+    (e) => {
+      dispatch(uploadFiles(e.target.files));
+    },
+    [dispatch]
+  );
 
   const handleClickImage = (idx) => {
     setSelectedImageIndex(idx);

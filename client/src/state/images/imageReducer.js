@@ -29,7 +29,7 @@ export const initialState = {
   error: null,
 };
 
-export default (state, action) => {
+const imageReducer = (state, action) => {
   switch (action.type) {
     case actions.FETCH_DATA:
       return {
@@ -262,5 +262,10 @@ export default (state, action) => {
           return image;
         }),
       };
+
+    default:
+      return state;
   }
 };
+
+export default imageReducer;

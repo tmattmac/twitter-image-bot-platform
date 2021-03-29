@@ -35,9 +35,12 @@ const FileUpload = ({ onChange }) => {
   const classes = useStyles();
   const notify = useContext(SnackbarContext);
 
-  const onDrop = useCallback((acceptedFiles) => {
-    onChange({ target: { files: acceptedFiles } });
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      onChange({ target: { files: acceptedFiles } });
+    },
+    [onChange]
+  );
 
   const onDropRejected = useCallback(() => {
     notify(

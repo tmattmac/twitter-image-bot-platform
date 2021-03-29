@@ -1,7 +1,6 @@
-import { Container, CssBaseline, makeStyles } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import axios from 'axios';
 import Navbar from './components/Navbar';
-import SnackbarProvider from './context/snackbar/provider';
 import useFetch from './hooks/useFetch';
 import BotManager from './pages/BotManager';
 import LandingPage from './pages/LandingPage';
@@ -13,17 +12,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
-  const [userData, loading, error, retry, setUserData] = useFetch(
+  const { data: userData, loading, setData: setUserData } = useFetch(
     '/auth/isAuthenticated'
   );
   const classes = useStyles();
 
   const handleLogout = (e) => {
     e.preventDefault();
-    axios
-      .post('/auth/logout')
-      .then(() => setUserData(null))
-      .catch(console.error); // TODO: Handle error properly
+    axios.post('/auth/logout').finally(() => setUserData(null));
   };
 
   let display;
@@ -33,13 +29,12 @@ function App() {
   else display = <BotManager />;
 
   return (
-    <SnackbarProvider>
-      <CssBaseline />
+    <>
       <Navbar user={userData?.user} handleLogout={handleLogout} />
       <Container maxWidth="lg" className={classes.container}>
         {display}
       </Container>
-    </SnackbarProvider>
+    </>
   );
 }
 
