@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import EditScheduleForm from '../components/EditScheduleForm';
 import FileUpload from '../components/FileUpload';
 import GridDisplayImageList from '../components/GridDisplayImageList';
+import GridDisplayTitle from '../components/GridDisplayTitle';
 import ImageEditDialog from '../components/ImageEditDialog';
 import useAsyncReducer from '../hooks/useAsyncReducerWithNotifications';
 import { fetchData, uploadFiles } from '../state/images/imageActions';
@@ -30,9 +31,13 @@ const BotManager = (props) => {
     [dispatch]
   );
 
-  const handleClickImage = (idx) => {
-    setSelectedImageIndex(idx);
-  };
+  const handleClickImage = useCallback(
+    (id) => {
+      const idx = state.images.findIndex((image) => image.id === id);
+      setSelectedImageIndex(idx);
+    },
+    [state.images]
+  );
 
   const handleCloseDialog = () => setSelectedImageIndex(null);
 
@@ -49,7 +54,7 @@ const BotManager = (props) => {
           <EditScheduleForm />
         </Grid>
       </Grid>
-
+      <GridDisplayTitle count={state.images.length || 0} />
       <GridDisplayImageList
         images={state.images}
         handleClickImage={handleClickImage}

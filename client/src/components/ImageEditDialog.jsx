@@ -39,10 +39,22 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
     display: 'flex',
+    flexFlow: 'row wrap',
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   formInput: {
     flexGrow: 2,
+  },
+  button: {
+    margin: theme.spacing(0, 1),
+  },
+  flexBreak: {
+    flexBasis: '100%',
+    height: theme.spacing(1),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
   },
 }));
 
@@ -130,13 +142,25 @@ const ImageEditDialog = ({
             disabled={image?.status.edit.pending}
             multiline
           />
-          <Button disabled={isSaved} type="submit" color="primary">
+          <div className={classes.flexBreak} />
+          <Button
+            disabled={isSaved}
+            type="submit"
+            color="primary"
+            variant="contained"
+            className={classes.button}>
             Save
           </Button>
-          <Button color="secondary" onClick={handleDelete}>
+          <Button
+            color="secondary"
+            onClick={handleDelete}
+            className={classes.button}>
             Delete
           </Button>
-          <Button color="default" onClick={handleCloseDialog}>
+          <Button
+            color="default"
+            onClick={handleCloseDialog}
+            className={classes.button}>
             Cancel
           </Button>
         </form>

@@ -8,7 +8,7 @@ const GridDisplayImageList = ({ images, handleClickImage }) => {
         <GridDisplayImageItem
           image={image}
           key={image.clientId || image.id}
-          handleClick={() => handleClickImage(idx)}
+          handleClick={handleClickImage}
         />
       ))}
     </Grid>

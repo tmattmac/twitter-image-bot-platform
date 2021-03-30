@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     border: '3px dashed rgba(0,0,0,0.25)',
     borderRadius: theme.spacing(1),
+    transition: 'background-color .25s',
   },
 }));
 
