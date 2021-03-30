@@ -1,5 +1,5 @@
 import { Chip, makeStyles, Typography } from '@material-ui/core';
-import LineBehind from './LineBehind';
+import LineBehind from '../common/LineBehind';
 
 const useStyles = makeStyles((theme) => ({
   text: {

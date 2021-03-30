@@ -11,13 +11,13 @@ import {
 } from '@material-ui/core';
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
-import useConfirmationDialog from '../hooks/useConfirmationDialog';
+import useConfirmationDialog from '../../hooks/useConfirmationDialog';
 import {
   clearEditError,
   deleteImage,
   updateImageCaption,
-} from '../state/images/imageActions';
-import ConfirmationDialog from './ConfirmationDialog';
+} from '../../state/images/imageActions';
+import ConfirmationDialog from '../common/ConfirmationDialog';
 
 const useStyles = makeStyles((theme) => ({
   dialogWrapper: {
