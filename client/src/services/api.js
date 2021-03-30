@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { v4 as uuid } from 'uuid';
-import data from './MOCK_DATA.json';
 
 const isImage = (file) => file.type.startsWith('image');
 
@@ -13,9 +12,8 @@ class APIClient {
     this.uploadFile = this.uploadFile.bind(this);
   }
 
-  async getAll() {
-    return data;
-    // return this._axios.get('/images').then((response) => response.data.files);
+  getAll() {
+    return this._axios.get('/images').then((response) => response.data.files);
   }
 
   update(id, metadata) {
@@ -76,8 +74,7 @@ class APIClient {
     });
   }
 
-  async delete(id) {
-    return 'success';
+  delete(id) {
     return this._axios.delete(`/images/${id}`);
   }
 
