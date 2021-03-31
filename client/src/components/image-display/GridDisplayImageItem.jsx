@@ -19,6 +19,17 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     position: 'relative',
+    animation: '$fadeIn 300ms',
+    animationDelay: '150ms',
+    animationFillMode: 'both',
+  },
+  '@keyframes fadeIn': {
+    '0%': {
+      opacity: 0,
+    },
+    '100%': {
+      opacity: 1,
+    },
   },
 }));
 
@@ -29,11 +40,7 @@ const GridDisplayImageItem = ({ image, handleClick, ...props }) => {
   return useMemo(() => {
     return (
       <Grid item xs={12} sm={6} md={3}>
-        <LazyLoad
-          height={200}
-          offset={100}
-          once
-          placeholder={<LoadingOverlay transparent={false} />}>
+        <LazyLoad height={200} once>
           <Card className={classes.card}>
             <LoadingOverlay
               isLoading={

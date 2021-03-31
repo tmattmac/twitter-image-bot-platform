@@ -9,14 +9,20 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     width: '100%',
     height: '100%',
-    background: '#000000',
+    backgroundColor: '#000000',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 2,
+    transition: 'background-color 250ms',
   },
   transparent: {
-    background: 'rgba(0,0,0,0.7)',
+    animation: '$fadeIn 500ms both',
+  },
+  '@keyframes fadeIn': {
+    '100%': {
+      backgroundColor: 'rgba(0,0,0,0.7)',
+    },
   },
   progress: {
     position: 'relative',
