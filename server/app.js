@@ -19,7 +19,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(fileUpload());
+app.use(
+  fileUpload({
+    limits: { fileSize: 5 * 1024 * 1024 },
+  })
+);
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('trust proxy', 1);
 
@@ -47,12 +51,13 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res) {
+// eslint-disable-next-line no-unused-vars
+app.use(function (err, req, res, next) {
   const isDevEnv = req.app.get('env') === 'development';
   if (isDevEnv) console.error(err);
 
   // render the error page
-  res.status(err.status || 500).send(err);
+  res.status(err.status || 500).send({ error: err.message });
 });
 
 module.exports = app;

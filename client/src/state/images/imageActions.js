@@ -1,6 +1,7 @@
 import {
   DEFAULT_DELETE_ERROR,
   DEFAULT_FETCH_ERROR,
+  DEFAULT_UPDATE_ERROR,
   DEFAULT_UPLOAD_ERROR,
 } from '../../lib/constants';
 import api from '../../services/api';
@@ -36,7 +37,7 @@ export function fetchData() {
       .catch((err) => {
         dispatch({
           type: actions.FETCH_DATA_FAILURE,
-          error: err.response?.data?.message || DEFAULT_FETCH_ERROR,
+          error: err.response?.data?.error || DEFAULT_FETCH_ERROR,
         });
       });
   };
@@ -71,7 +72,7 @@ export function uploadFiles(files) {
             payload: {
               clientId: upload.clientId,
             },
-            error: error.response?.data?.message || DEFAULT_UPLOAD_ERROR,
+            error: error.response?.data?.error || DEFAULT_UPLOAD_ERROR,
           });
         });
     });
@@ -98,7 +99,7 @@ export function updateImageCaption(id, caption) {
         dispatch({
           type: actions.IMAGE_CAPTION_UPDATE_FAILURE,
           payload: { id },
-          error: error.response?.data?.message || DEFAULT_FETCH_ERROR,
+          error: error.response?.data?.error || DEFAULT_UPDATE_ERROR,
         });
       });
   };
@@ -124,7 +125,7 @@ export function deleteImage(id) {
         dispatch({
           type: actions.IMAGE_DELETE_FAILURE,
           payload: { id },
-          error: error.response?.data?.message || DEFAULT_DELETE_ERROR,
+          error: error.response?.data?.error || DEFAULT_DELETE_ERROR,
         });
       });
   };

@@ -2,12 +2,18 @@ const express = require('express');
 const router = express.Router();
 const isAuthenticated = require('../middleware/isAuthenticated');
 const streamifyFiles = require('../middleware/streamifyFiles');
+const enforceFileLimits = require('../middleware/enforceFileLimits');
 
 const imagesController = require('../controllers/images');
 
 router.use(isAuthenticated);
 
-router.post('/', streamifyFiles, imagesController.uploadImage);
+router.post(
+  '/',
+  enforceFileLimits,
+  streamifyFiles,
+  imagesController.uploadImage
+);
 
 router.get('/', imagesController.getImages);
 

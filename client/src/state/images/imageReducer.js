@@ -91,19 +91,10 @@ const imageReducer = (state, action) => {
     case actions.IMAGE_UPLOAD_FAILURE:
       return {
         ...state,
-        images: state.images.map((image) => {
+        // TODO: Handle upload errors more elegantly
+        images: state.images.filter((image) => {
           if (image.clientId === action.payload.clientId) {
-            return {
-              ...image,
-              status: {
-                ...image.status,
-                upload: {
-                  ...image.status.upload,
-                  pending: false,
-                  error: action.error,
-                },
-              },
-            };
+            return false;
           }
           return image;
         }),
@@ -192,7 +183,6 @@ const imageReducer = (state, action) => {
       };
 
     case actions.IMAGE_CAPTION_CLEAR_ERROR:
-      console.log(action.payload.id);
       return {
         ...state,
         images: state.images.map((image) => {

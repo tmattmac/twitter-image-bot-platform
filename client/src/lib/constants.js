@@ -4,3 +4,5 @@ export const DEFAULT_UPLOAD_ERROR =
   'There was an error uploading the image. Please try again.';
 export const DEFAULT_DELETE_ERROR =
   'There was an error deleting the image. Please try again.';
+export const DEFAULT_UPDATE_ERROR =
+  'There was an error updating the caption. Please try again.';

@@ -45,7 +45,7 @@ const FileUpload = ({ onChange }) => {
 
   const onDropRejected = useCallback(() => {
     notify(
-      'Some files were not uploaded. Make sure all your files are image files.'
+      'Some files were not uploaded. Make sure all your files are image files smaller than 5MB.'
     );
   }, [notify]);
 
@@ -53,6 +53,15 @@ const FileUpload = ({ onChange }) => {
     onDrop,
     onDropRejected,
     accept: 'image/*',
+    validator: (file) => {
+      if (file.size > 5 * 1024 * 1024) {
+        return {
+          code: 'file-too-large',
+          message: 'File must be smaller than 5MB.',
+        };
+      }
+      return null;
+    },
   });
 
   return (
