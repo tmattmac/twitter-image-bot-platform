@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "private": true,
   "dependencies": {
-    "@google-cloud/storage": "^5.8.3",
+    "@google-cloud/storage": "^5.8.4",
     "dotenv": "^8.2.0",
     "knex": "^0.95.4",
-    "pg": "^8.5.1",
+    "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "twit": "^2.2.11"
   }

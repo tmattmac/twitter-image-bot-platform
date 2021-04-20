@@ -15,7 +15,7 @@ const bucket = storage.bucket(process.env.GCLOUD_BUCKET_NAME);
  * post - post random image from user's Cloud Storage folder to their Twitter account
  * @param message - PubSub message with `id` and `enabled` attributes
  */
-exports.post = async function (message) {
+exports.post = async function (message, response) {
   const { enabled, id } = message.attributes;
 
   if (!(enabled === 'true')) return;
@@ -25,20 +25,25 @@ exports.post = async function (message) {
     .where({ id });
 
   if (!user) {
-    console.error(`Schedule with ID ${id} not in database.`);
-    return;
+    return response.status(400).send({
+      error: `Schedule with ID ${id} not found in database.`,
+    });
   }
 
   const [files] = await bucket.getFiles({ prefix: `${id}/` });
 
   if (!files || files.length === 0) {
-    return;
+    return response.send({
+      message: `No files in folder with ID ${id}`,
+    });
   }
 
   const randomChoice = Math.floor(Math.random() * files.length);
   const image = files[randomChoice];
+
+  // TODO: Stream image asynchronously from bucket to Twitter API
   const [imageData] = await image.download();
-  const { caption } = image.metadata.metadata || {};
+  const caption = image.metadata.metadata && image.metadata.metadata.caption;
 
   const Twitter = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -56,8 +61,10 @@ exports.post = async function (message) {
 
     const mediaIdStr = uploadData.data.media_id_string;
     const altText = caption;
-    const metaParams = { media_id: mediaIdStr };
-    metaParams.alt_text = altText || undefined;
+    const metaParams = {
+      media_id: mediaIdStr,
+      alt_text: altText || undefined,
+    };
 
     await Twitter.post('media/metadata/create', metaParams);
     params = {
@@ -66,7 +73,14 @@ exports.post = async function (message) {
     };
 
     await Twitter.post('statuses/update', params);
+
+    return response.send({
+      message: `Successfully posted image from folder ${id}`,
+    });
   } catch (err) {
-    console.error(err);
+    return response.status(502).send({
+      error: 'Could not upload image to Twitter',
+      details: err,
+    });
   }
 };
