@@ -1,3 +1,4 @@
+const createError = require('http-errors');
 const sortFilesByDate = require('../helpers/sortFilesByDate');
 const {
   uploadToBucket,
@@ -6,6 +7,7 @@ const {
   updateFileMetadata,
   deleteFile,
 } = require('../services/google/storage');
+const validateTweetLength = require('../helpers/validateTweetLength');
 
 async function uploadImage(req, res, next) {
   try {
@@ -61,6 +63,11 @@ async function updateImageMetadata(req, res, next) {
   try {
     const metadata = req.body.metadata;
     const fileId = req.params.id;
+
+    if (!validateTweetLength(metadata.caption)) {
+      return next(createError('Caption must be less than 280 characters'));
+    }
+
     await updateFileMetadata(req.user.id, fileId, metadata);
     res.send({
       message: 'successfully updated metadata',
