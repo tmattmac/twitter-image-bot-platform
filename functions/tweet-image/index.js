@@ -15,27 +15,25 @@ const bucket = storage.bucket(process.env.GCLOUD_BUCKET_NAME);
  * post - post random image from user's Cloud Storage folder to their Twitter account
  * @param message - PubSub message with `id` and `enabled` attributes
  */
-exports.post = async function (message, response) {
+exports.post = async function (message) {
   const { enabled, id } = message.attributes;
 
-  if (!(enabled === 'true')) return;
+  if (!(enabled === 'true')) {
+    return;
+  }
 
   const [user] = await knex('users')
     .column('id', 'twitter_oauth_token', 'twitter_oauth_secret')
     .where({ id });
 
   if (!user) {
-    return response.status(400).send({
-      error: `Schedule with ID ${id} not found in database.`,
-    });
+    return console.error(`Schedule with ID ${id} not found in database.`);
   }
 
   const [files] = await bucket.getFiles({ prefix: `${id}/` });
 
   if (!files || files.length === 0) {
-    return response.send({
-      message: `No files in folder with ID ${id}`,
-    });
+    return console.log(`No files in folder with ID ${id}`);
   }
 
   const randomChoice = Math.floor(Math.random() * files.length);
@@ -63,7 +61,7 @@ exports.post = async function (message, response) {
     const altText = caption;
     const metaParams = {
       media_id: mediaIdStr,
-      alt_text: altText || undefined,
+      alt_text: altText ? { text: altText } : undefined,
     };
 
     await Twitter.post('media/metadata/create', metaParams);
@@ -74,13 +72,8 @@ exports.post = async function (message, response) {
 
     await Twitter.post('statuses/update', params);
 
-    return response.send({
-      message: `Successfully posted image from folder ${id}`,
-    });
+    return console.log(`Successfully posted image from folder ${id}`);
   } catch (err) {
-    return response.status(502).send({
-      error: 'Could not upload image to Twitter',
-      details: err,
-    });
+    return console.error(err);
   }
 };
