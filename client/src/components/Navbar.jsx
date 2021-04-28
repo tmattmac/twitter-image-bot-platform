@@ -37,7 +37,7 @@ const Navbar = ({ user, handleLogout }) => {
     <AppBar position="sticky" className={classes.root}>
       <Toolbar>
         <Typography variant="h6" component="h1" className={classes.header}>
-          Natsuki Bot Maker
+          Twitter Bot Maker
         </Typography>
         {user ? (
           <Button
